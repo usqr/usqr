@@ -345,3 +345,7 @@ a:hover { text-decoration-color: var(--accent); text-decoration-thickness: 2px; 
 
 /* Separate links (not in a sentence): target min. 24px (WCAG 2.5.8) */
 .colophon a, .page-head .count a { display: inline-flex; align-items: center; min-height: 24px; }
+
+/* Corner band: anchor the box to the window edge, so the band ends go off-screen */
+.wrap.has-corner > .corner { right: calc((100% - 100vw) / 2); }
+body { overflow-x: clip; }
