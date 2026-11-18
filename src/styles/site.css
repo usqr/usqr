@@ -210,6 +210,7 @@ a:hover { text-decoration-color: var(--accent); text-decoration-thickness: 2px; 
 .page-head { padding-block: var(--space-6) var(--space-8); row-gap: var(--space-4); }
 .page-title { font-size: var(--title); font-weight: 700; line-height: 1.02; letter-spacing: -0.005em; }
 .lede { color: var(--fg-2); max-width: 52ch; }
+.page-title + .lede { margin-top: max(var(--space-4), calc(var(--title) * 0.3)); } /* gap grows with the title: 16px small, about 22px large */
 .count { font-size: var(--text-sm); color: var(--meta); }
 
 /* ---------- Post ---------- */
