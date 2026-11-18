@@ -120,6 +120,7 @@ a:hover { text-decoration-color: var(--accent); text-decoration-thickness: 2px; 
 }
 
 /* ---------- Header ---------- */
+.site-header { border-bottom: 1px solid var(--accent); } /* full-bleed brand line: header spans the viewport, .wrap does not */
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0 var(--space-5); min-height: 4.5rem; }
 .brand { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; color: var(--fg); text-decoration: none; letter-spacing: 0.02em; }
 .brand .light { font-weight: 300; }
@@ -206,7 +207,7 @@ a:hover { text-decoration-color: var(--accent); text-decoration-thickness: 2px; 
 .post-rows.big .t { font-size: clamp(var(--text-lg), 1rem + 1.2vw, var(--text-xl)); }
 
 /* ---------- Page heads ---------- */
-.page-head { border-top: var(--rule-strong); padding-block: var(--space-6) var(--space-8); row-gap: var(--space-4); }
+.page-head { padding-block: var(--space-6) var(--space-8); row-gap: var(--space-4); }
 .page-title { font-size: var(--title); font-weight: 700; line-height: 1.02; letter-spacing: -0.005em; }
 .lede { color: var(--fg-2); max-width: 52ch; }
 .count { font-size: var(--text-sm); color: var(--meta); }
@@ -271,7 +272,7 @@ a:hover { text-decoration-color: var(--accent); text-decoration-thickness: 2px; 
 .corner { display: none; }
 @media (min-width: 1024px) {
   .corner { display: block; position: absolute; top: 0; right: 0; width: 200px; height: 200px; overflow: hidden; pointer-events: none; z-index: 1; }
-  .corner span { position: absolute; top: 74px; right: -45px; width: 260px; /* band center on the diagonal, 170px from the corner: about 240px visible */ transform: rotate(45deg); text-align: center;
+  .corner span { position: absolute; top: 74px; right: -85px; width: 340px; /* band center on the diagonal, 170px from the corner; long enough that the box clips the two ends */ transform: rotate(45deg); text-align: center;
     font-family: var(--font-serif); font-size: var(--text-xs); letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--fg-2); border-block: 1px solid var(--accent); padding-block: var(--space-1); background: var(--bg); }
 }
