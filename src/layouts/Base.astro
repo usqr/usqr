@@ -52,6 +52,9 @@ const year = new Date().getFullYear();
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+{goatcounter && (
+  <img class="gc" src={`https://${goatcounter}.goatcounter.com/count?p=${encodeURIComponent(Astro.url.pathname)}`} alt="" width="1" height="1" referrerpolicy="no-referrer-when-downgrade">
+)}
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href={u('/')}><span class="light">{profile.firstName}</span><span class="bold">{profile.lastName}</span></a>
@@ -83,8 +86,5 @@ const year = new Date().getFullYear();
     </div>
   </div>
 </footer>
-{goatcounter && (
-  <img class="gc" src={`https://${goatcounter}.goatcounter.com/count?p=${encodeURIComponent(Astro.url.pathname)}`} alt="" width="1" height="1" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-)}
 </body>
 </html>
