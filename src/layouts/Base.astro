@@ -20,7 +20,7 @@ const nav = [
   { id: 'colophon', label: 'Colophon', href: u('/colophon/') },
 ] as const;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-// Cookie-free count without JavaScript. Set PUBLIC_GOATCOUNTER to the site code to turn it on.
+// Cookie-free count: count.js (sends the referrer), image fallback without JS. Set PUBLIC_GOATCOUNTER to turn it on.
 const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER;
 const year = new Date().getFullYear();
 ---
@@ -48,12 +48,13 @@ const year = new Date().getFullYear();
 <link rel="sitemap" href={u('/sitemap-index.xml')}>
 <link rel="preload" href={lato400} as="font" type="font/woff2" crossorigin>
 <link rel="preload" href={slab} as="font" type="font/woff2" crossorigin>
+{goatcounter && <script is:inline async data-goatcounter={`https://${goatcounter}.goatcounter.com/count`} src="https://gc.zgo.at/count.js"></script>}
 <slot name="head" />
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 {goatcounter && (
-  <img class="gc" src={`https://${goatcounter}.goatcounter.com/count?p=${encodeURIComponent(Astro.url.pathname)}`} alt="" width="1" height="1" referrerpolicy="no-referrer-when-downgrade">
+  <noscript><img class="gc" src={`https://${goatcounter}.goatcounter.com/count?p=${encodeURIComponent(Astro.url.pathname)}`} alt="" width="1" height="1"></noscript>
 )}
 <header class="site-header">
   <div class="wrap">

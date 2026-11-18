@@ -23,8 +23,11 @@ test('dist exists with the places from the flow', () => {
   }
 });
 
-test('pages ship no JavaScript (NoLoJS)', () => {
-  for (const { name, html } of pages) assert.doesNotMatch(html, /<script\b/i, name);
+test('pages ship no JavaScript except the GoatCounter count.js (NoLoJS)', () => {
+  for (const { name, html } of pages) {
+    const scripts = html.match(/<script\b[^>]*>/gi) ?? [];
+    for (const tag of scripts) assert.match(tag, /src="https:\/\/gc\.zgo\.at\/count\.js"/, `${name}: ${tag}`);
+  }
 });
 
 test('pages contain no email address and no phone number (private data)', () => {
