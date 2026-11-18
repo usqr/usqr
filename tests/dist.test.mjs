@@ -23,10 +23,18 @@ test('dist exists with the places from the flow', () => {
   }
 });
 
-test('pages ship no JavaScript except the GoatCounter count.js (NoLoJS)', () => {
+test('pages ship no JavaScript except count.js and the print shortcut (NoLoJS)', () => {
   for (const { name, html } of pages) {
     const scripts = html.match(/<script\b[^>]*>/gi) ?? [];
-    for (const tag of scripts) assert.match(tag, /src="https:\/\/gc\.zgo\.at\/count\.js"/, `${name}: ${tag}`);
+    for (const tag of scripts) assert.match(tag, /src="https:\/\/gc\.zgo\.at\/count\.js"|data-print-shortcut/, `${name}: ${tag}`);
+  }
+});
+
+test('every page has one print shortcut script that points to the print CV', () => {
+  for (const { name, html } of pages) {
+    const shortcut = html.match(/<script\b[^>]*data-print-shortcut[^>]*>([\s\S]*?)<\/script>/gi) ?? [];
+    assert.equal(shortcut.length, 1, name);
+    assert.ok(shortcut[0].includes(`"${base}/cv/"`), `${name}: print CV URL`);
   }
 });
 

@@ -87,5 +87,18 @@ const year = new Date().getFullYear();
     <p class="foot-meta">© {year} {fullName} · Static HTML and CSS. No cookies.</p>
   </div>
 </footer>
+<script is:inline data-print-shortcut define:vars={{ cv: u('/cv/') }}>
+// Progressive enhancement: Cmd/Ctrl+P opens the print CV and its print dialog. Without JS, the browser prints the current page.
+if (location.pathname !== cv) {
+  addEventListener('keydown', (e) => {
+    if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey || e.key.toLowerCase() !== 'p') return;
+    e.preventDefault();
+    location.href = cv + '#print';
+  });
+} else if (location.hash === '#print') {
+  history.replaceState(null, '', cv);
+  addEventListener('load', () => document.fonts.ready.then(() => print()));
+}
+</script>
 </body>
 </html>
