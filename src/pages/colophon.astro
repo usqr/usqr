@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Corner from '../components/Corner.astro';
+import { skillUrl, u } from '../lib/url';
+
+const sections = [
+  { id: 'stack', title: 'Stack' },
+  { id: 'fonts', title: 'Fonts' },
+  { id: 'tokens', title: 'Design system' },
+  { id: 'nolojs', title: 'NoLoJS' },
+  { id: 'analytics', title: 'Analytics' },
+  { id: 'print', title: 'Print and PDF' },
+];
+const num = (id: string) => String(sections.findIndex((s) => s.id === id) + 1).padStart(2, '0');
+---
+<Base title="Colophon" current="colophon" description="How this site is built: stack, fonts, tokens, and privacy.">
+  <div class="wrap has-corner">
+    <Corner label="Colophon" />
+    <header class="grid page-head">
+      <div class="span-label"><p class="kicker"><span class="usq" aria-hidden="true"></span>Colophon</p></div>
+      <div class="span-body"><h1 class="page-title">How this site is built</h1><p class="lede">The site is part of my work. Here is how I made it.</p></div>
+    </header>
+    <section class="grid section" id="stack" aria-labelledby="stack-h">
+      <div class="span-label label"><span class="num">{num('stack')}</span><h2 id="stack-h">Stack</h2></div>
+      <div class="span-body"><p class="prose">Astro makes static HTML and CSS from Markdown posts and one CV data file. No framework runs in the browser. GitHub Actions builds the site and GitHub Pages hosts it.</p></div>
+    </section>
+    <section class="grid section" id="fonts" aria-labelledby="fonts-h">
+      <div class="span-label label"><span class="num">{num('fonts')}</span><h2 id="fonts-h">Fonts</h2></div>
+      <div class="span-body"><p class="prose">Lato for text and Roboto Slab for headings. I host the files myself. I cut them to English and Polish letters, so each file is about 12–15 KB.</p></div>
+    </section>
+    <section class="grid section" id="tokens" aria-labelledby="tokens-h">
+      <div class="span-label label"><span class="num">{num('tokens')}</span><h2 id="tokens-h">Design system</h2></div>
+      <div class="span-body"><p class="prose">One token file holds the colors, type sizes, and spacing. Light and dark themes use the same tokens. The ornament comes from my unsquare brandbook: a diagonal lattice and folded corners. See the skill <a href={skillUrl('design-tokens')}>Design tokens</a>.</p></div>
+    </section>
+    <section class="grid section" id="nolojs" aria-labelledby="nolojs-h">
+      <div class="span-label label"><span class="num">{num('nolojs')}</span><h2 id="nolojs-h">NoLoJS</h2></div>
+      <div class="span-body"><p class="prose">Every page works without JavaScript. Links, print, and themes are plain HTML and CSS.</p></div>
+    </section>
+    <section class="grid section" id="analytics" aria-labelledby="analytics-h">
+      <div class="span-label label"><span class="num">{num('analytics')}</span><h2 id="analytics-h">Analytics</h2></div>
+      <div class="span-body"><p class="prose">I count visits with GoatCounter, with an image and no script. It sets no cookies and keeps no personal data.</p></div>
+    </section>
+    <section class="grid section" id="print" aria-labelledby="print-h">
+      <div class="span-label label"><span class="num">{num('print')}</span><h2 id="print-h">Print and PDF</h2></div>
+      <div class="span-body"><p class="prose">The CV page has a print stylesheet: A4, one column, links with their URLs. The build makes <a href={u('/cv.pdf')}>a PDF</a> from the same page.</p></div>
+    </section>
+  </div>
+</Base>

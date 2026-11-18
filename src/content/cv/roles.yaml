@@ -1,0 +1,65 @@
+# One entry = one Role. Newest first is computed (current roles first).
+# Public highlights only: no internal names, ticket keys, or PR numbers.
+- id: ckeditor-senior
+  title: Senior Frontend Developer / UX Designer
+  org: CKEditor
+  note: hybrid, full time
+  start: "2025-09"
+  highlights:
+    - I migrate legacy pages to the design system, one block at a time, in small stacked pull requests.
+    - I moved a blog to a dark theme and kept the light theme safe with Playwright parity tests.
+    - "I run an AI-assisted review workflow: triage each finding, add a regression test for each fix, keep diffs small."
+  skills: [design-tokens, css, playwright, code-review]
+- id: ckeditor
+  title: Frontend Developer / UX Designer
+  org: CKEditor
+  start: "2020-07"
+  end: "2025-08"
+  highlights:
+    - I designed and built web pages and UI, from the first sketch to production code.
+    - I worked with designers and developers on shared components and tokens.
+  skills: [ux-research, ui-design, html, typescript]
+- id: self-employed
+  title: Web design and frontend
+  org: Self-employed
+  start: "2019-05"
+  highlights:
+    - I design and build small websites and static pages for clients.
+- id: e-point
+  title: Frontend Developer
+  org: E-point
+  start: "2019-09"
+  end: "2020-01"
+  highlights:
+    - I built a static HTML generator for more than 80 landing pages.
+    - I made the print version of a PIM Core product catalog.
+  skills: [html, css, pim-core]
+- id: displate
+  title: Senior Web Developer
+  org: Displate, via GWD concept
+  start: "2019-02"
+  end: "2019-05"
+- id: lionbridge-senior
+  title: Senior Web Developer
+  org: Lionbridge, for Cisco
+  start: "2018-06"
+  end: "2019-02"
+  highlights:
+    - I was the acting team lead. I onboarded and mentored new developers.
+  skills: [mentoring]
+- id: lionbridge
+  title: Web Developer
+  org: Lionbridge, for Cisco
+  start: "2014-04"
+  end: "2018-05"
+  highlights:
+    - I built EMEAR pages for Cisco.com in AEM and checked them against the brand guidelines.
+    - I gave trainings on typography and on AEM.
+  skills: [aem, typography, mentoring]
+- id: zgoda
+  title: IT Specialist / Assistant architect
+  org: zgoda.net · Krzysztof Polkowski Architektura
+  start: "2004-01"
+  end: "2014-03"
+  highlights:
+    - I started as an intern. Later I ran the studio IT, its website, and its print work.

@@ -1,0 +1,51 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Chips from '../../components/Chips.astro';
+import Corner from '../../components/Corner.astro';
+import { getSkill } from '../../data/skills';
+import { getPosts, postsFor, type Post } from '../../lib/content';
+import { formatDate, isoDate } from '../../lib/format';
+import { postUrl, u } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+interface Props { post: Post; posts: Post[] }
+const { post, posts } = Astro.props;
+const { data } = post;
+const { Content } = await render(post);
+// "More on <skill>": the first skill in the front matter, max 3 other posts.
+const primary = getSkill(data.skills[0]);
+const more = postsFor(posts, primary.id).filter((p) => p.id !== post.id).slice(0, 3);
+---
+<Base title={data.title} description={data.description} current="blog">
+  <article class="wrap has-corner">
+    <Corner label={primary.name} />
+    <header class="grid page-head">
+      <div class="span-label"><p class="kicker"><span class="usq" aria-hidden="true"></span>Post</p></div>
+      <h1 class="span-body post-title">{data.title}</h1>
+    </header>
+    <div class="grid post-grid">
+      <aside class="span-label meta" aria-label="Post details">
+        <dl>
+          <div><dt>Published</dt><dd><time datetime={isoDate(data.pubDate)}>{formatDate(data.pubDate)}</time></dd></div>
+          {data.updatedDate && <div><dt>Updated</dt><dd><time datetime={isoDate(data.updatedDate)}>{formatDate(data.updatedDate)}</time></dd></div>}
+        </dl>
+        <Chips skills={data.skills} />
+      </aside>
+      <div class="span-body prose"><Content /></div>
+    </div>
+    <footer class="grid post-foot">
+      <p class="span-label author">Written by <a href={u('/')}>Łukasz Datkowski</a>, frontend developer and UX designer.</p>
+      {more.length > 0 && (
+        <nav class="span-body" aria-labelledby="more-h">
+          <h2 id="more-h">More on {primary.name}</h2>
+          <ul>{more.map((p) => <li><a href={postUrl(p.id)}>{p.data.title}</a></li>)}</ul>
+        </nav>
+      )}
+    </footer>
+  </article>
+</Base>

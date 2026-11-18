@@ -1,0 +1,78 @@
+---
+import '../styles/tokens.css';
+import '../styles/site.css';
+import lato400 from '../styles/fonts/lato-400.woff2?url';
+import slab from '../styles/fonts/roboto-slab-var.woff2?url';
+import { fullName, profile } from '../data/profile';
+import { u } from '../lib/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: 'cv' | 'blog' | 'colophon';
+}
+
+const { title, description = profile.statement, current } = Astro.props;
+const pageTitle = title ? `${title} — ${fullName}` : `${fullName} — Frontend, UX, design systems`;
+const nav = [
+  { id: 'cv', label: 'CV', href: u('/') },
+  { id: 'blog', label: 'Blog', href: u('/blog/') },
+  { id: 'colophon', label: 'Colophon', href: u('/colophon/') },
+] as const;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+// Cookie-free count without JavaScript. Set PUBLIC_GOATCOUNTER to the site code to turn it on.
+const goatcounter = import.meta.env.PUBLIC_GOATCOUNTER;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{pageTitle}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+<link rel="alternate" type="application/rss+xml" title={`${fullName} — Blog`} href={u('/rss.xml')}>
+<link rel="sitemap" href={u('/sitemap-index.xml')}>
+<link rel="preload" href={lato400} as="font" type="font/woff2" crossorigin>
+<link rel="preload" href={slab} as="font" type="font/woff2" crossorigin>
+<slot name="head" />
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href={u('/')}><span class="light">{profile.firstName}</span><span class="bold">{profile.lastName}</span></a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={item.id === current ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <slot />
+</main>
+<footer class="site-footer lattice">
+  <div class="wrap">
+    <div class="grid footer-grid">
+      <div class="span-label"><span class="label"><span class="usq" aria-hidden="true"></span><span class="num">Contact</span></span></div>
+      <div class="span-body">
+        <p class="footer-call">Hiring for a hybrid role? Let’s talk.</p>
+        <ul class="footer-links">
+          {profile.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          <li><a href={u('/rss.xml')}>RSS</a></li>
+        </ul>
+        <p class="colophon"><a href={u('/colophon/')}>How this site is built →</a></p>
+        <p class="footer-meta">© {year} {fullName}</p>
+      </div>
+    </div>
+  </div>
+</footer>
+{goatcounter && (
+  <img class="gc" src={`https://${goatcounter}.goatcounter.com/count?p=${encodeURIComponent(Astro.url.pathname)}`} alt="" width="1" height="1" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+)}
+</body>
+</html>

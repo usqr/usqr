@@ -1,0 +1,27 @@
+---
+import Chips from './Chips.astro';
+import type { Post } from '../lib/content';
+import { formatDate, isoDate } from '../lib/format';
+import { postUrl } from '../lib/url';
+
+interface Props {
+  posts: Post[];
+  /** Blog index: h2 titles, chips, bigger type. */
+  big?: boolean;
+  class?: string;
+}
+const { posts, big = false, class: className } = Astro.props;
+const Heading = big ? 'h2' : 'h3';
+---
+<ol class:list={['post-rows', { big }, className]} role="list">
+  {posts.map((post) => (
+    <li class="post-row">
+      <time class="when" datetime={isoDate(post.data.pubDate)}>{formatDate(post.data.pubDate)}</time>
+      <div>
+        <Heading class:list={{ t: big }}><a href={postUrl(post.id)}>{post.data.title}</a></Heading>
+        <p>{post.data.description}</p>
+        {big && <Chips skills={post.data.skills} />}
+      </div>
+    </li>
+  ))}
+</ol>

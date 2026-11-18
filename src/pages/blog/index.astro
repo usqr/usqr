@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import Corner from '../../components/Corner.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/content';
+import { countLabel } from '../../lib/format';
+import { u } from '../../lib/url';
+
+const posts = await getPosts();
+---
+<Base title="Blog" current="blog" description="Notes on frontend, UX, and design systems.">
+  <div class="wrap has-corner">
+    <Corner label="Blog" />
+    <header class="grid page-head">
+      <div class="span-label"><p class="kicker"><span class="usq" aria-hidden="true"></span>Blog</p>{posts.length > 0 && <p class="count">{countLabel(posts.length, 'post')}</p>}</div>
+      <div class="span-body">
+        <h1 class="page-title">Notes on frontend, UX, and design systems</h1>
+        <p class="lede">Each post is proof for the skills on its chips. <a href={u('/rss.xml')}>Follow with RSS</a>.</p>
+      </div>
+    </header>
+    <section class="grid section" aria-label="Posts">
+      {posts.length > 0
+        ? <PostList posts={posts} big />
+        : <p class="span-body empty">First posts are on the way. <a href={u('/rss.xml')}>Follow with RSS</a> to see the first one.</p>}
+    </section>
+  </div>
+</Base>

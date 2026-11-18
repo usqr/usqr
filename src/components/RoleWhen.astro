@@ -1,0 +1,7 @@
+---
+import { formatMonth } from '../lib/format';
+
+interface Props { start: string; end?: string }
+const { start, end } = Astro.props;
+---
+<span class="when">{formatMonth(start)} – {end ? formatMonth(end) : <span class="now">now</span>}</span>

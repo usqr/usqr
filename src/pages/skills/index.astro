@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import { areas } from '../../data/skills';
+import { getSkillsWithPages } from '../../lib/content';
+import { countLabel } from '../../lib/format';
+import { skillUrl } from '../../lib/url';
+
+const withPages = await getSkillsWithPages();
+const sections = areas.map((area) => ({ area, items: withPages.filter(({ skill }) => skill.area === area.id) }));
+---
+<Base title="Skills" description="Skills grouped by area, with the posts and roles that show each one.">
+  <div class="wrap has-corner">
+    <header class="grid page-head">
+      <div class="span-label"><p class="kicker"><span class="usq" aria-hidden="true"></span>Skills</p></div>
+      <div class="span-body"><h1 class="page-title">What I work with</h1><p class="lede">Skills grouped by area. Each skill links to the posts and roles that show it.</p></div>
+    </header>
+    {sections.map(({ area, items }, i) => (
+      <section class="grid section" id={area.id} aria-labelledby={`${area.id}-h`}>
+        <div class="span-label label"><span class="num">{String(i + 1).padStart(2, '0')}</span><h2 id={`${area.id}-h`}>{area.name}</h2></div>
+        <div class="span-body">
+          <ul class="skill-list" role="list">
+            {items.map(({ skill, posts }) => (
+              <li><a href={skillUrl(skill.id)}>{skill.name}</a><span class="cnt">{posts.length > 0 && countLabel(posts.length, 'post')}</span></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))}
+  </div>
+</Base>

@@ -1,0 +1,20 @@
+- id: tdm
+  program: Total Design Management
+  school: "Postgraduate · Warsaw University of Technology Business School, with IWP · grade: excellent"
+  start: 2019
+  end: 2020
+- id: typography
+  program: Academic Course of Typography
+  school: Postgraduate, typography specialist · UKSW
+  start: 2012
+  end: 2013
+- id: it-engineer
+  program: IT Engineer
+  school: Computer graphics and DTP · School of Information Technology, Warsaw
+  start: 2005
+  end: 2009
+- id: architecture
+  program: Architectural technician
+  school: School of Architecture-Construction
+  start: 2002
+  end: 2005
