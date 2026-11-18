@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Chips from '../components/Chips.astro';
-import Corner from '../components/Corner.astro';
 import PostList from '../components/PostList.astro';
 import RoleWhen from '../components/RoleWhen.astro';
 import { profile } from '../data/profile';
@@ -13,83 +12,92 @@ const [roles, education, posts] = await Promise.all([getRoles(), getEducation(),
 const latest = posts.slice(0, 3);
 const areaLink: Record<string, string> = { frontend: 'Frontend skills', ux: 'UX skills', ds: 'Design-system skills' };
 ---
-<Base current="cv">
-  <section class="hero lattice has-corner" aria-labelledby="name">
-    <Corner label="Curriculum vitae" />
-    <div class="wrap"><div class="hero-panel">
+<Base current="cv" bodyClass="d2">
+  <section class="hero-d2 lattice" aria-labelledby="name">
+    <div class="band" aria-hidden="true"><span>Curriculum vitae</span></div>
+    <div class="wrap cgrid">
+      <p class="kicker"><span class="usq" aria-hidden="true"></span>Hybrid profile</p>
       <h1 class="name" id="name"><span class="light">{profile.firstName}</span> <span class="bold">{profile.lastName}</span></h1>
-      <div class="grid hero-grid">
-        <div class="span-label">
-          <p class="kicker"><span class="usq" aria-hidden="true"></span>Hybrid profile</p>
-          <p class="hybrid">{profile.hybrid.map((line, i) => <>{i > 0 && <br />}{line}</>)}</p>
-        </div>
-        <div class="span-body">
-          <p class="statement">{profile.statement}</p>
-          <ul class="hero-links">
-            <li><a href="#what">What I do</a></li>
-            <li><a href={u('/cv.pdf')}>Download PDF</a></li>
-            {profile.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-          </ul>
-          <p class="print-only sheet-contact">{profile.links.map((l) => <><a href={l.href}>{l.label}</a> </>)}</p>
-        </div>
-      </div>
-    </div></div>
+      <p class="hybrid">{profile.hybrid.join(' · ')}</p>
+      <p class="standfirst">{profile.statement}</p>
+      <ul class="proof">
+        <li><a href={u('/cv.pdf')}>CV as PDF</a></li>
+        {profile.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </div>
   </section>
 
   <div class="wrap">
-    <section class="grid section" id="what" aria-labelledby="what-h">
-      <div class="span-label label"><span class="num">01</span><h2 id="what-h">What I do</h2></div>
-      <ul class="span-body areas">
-        {areas.map((area) => (
-          <li id={`area-${area.id}`}>
-            <h3><span class="usq" aria-hidden="true"></span>{area.name}</h3>
-            <p>{area.statement}</p>
-            <a href={u(`/skills/#${area.id}`)}>{areaLink[area.id]} →</a>
-          </li>
-        ))}
-      </ul>
+    <section class="sec cgrid" id="what" aria-labelledby="what-h">
+      <div class="sec-label"><span class="num" aria-hidden="true">01</span><h2 id="what-h">What I do</h2></div>
+      <div class="sec-body">
+        <ul class="areas">
+          {areas.map((area) => (
+            <li id={`area-${area.id}`}>
+              <h3><span class="usq" aria-hidden="true"></span>{area.name}</h3>
+              <p>{area.statement}</p>
+              <a href={u(`/skills/#${area.id}`)}>{areaLink[area.id]} →</a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
 
-    <section class="grid section" id="experience" aria-labelledby="exp-h">
-      <div class="span-label label"><span class="num">02</span><h2 id="exp-h">Experience</h2></div>
-      <ol class="span-body rows" role="list">
-        {roles.map(({ id, data }) => (
-          <li class="row" id={`role-${id}`}>
-            <RoleWhen start={data.start} end={data.end} />
-            <div>
-              <h3>{data.title}</h3>
-              <span class="org">{data.note ? `${data.org} · ${data.note}` : data.org}</span>
-              {data.highlights.length > 0 && <ul class="hl">{data.highlights.map((h) => <li>{h}</li>)}</ul>}
-              <Chips skills={data.skills} />
-            </div>
-          </li>
-        ))}
-      </ol>
+    <section class="sec cgrid" id="experience" aria-labelledby="exp-h">
+      <div class="sec-label"><span class="num" aria-hidden="true">02</span><h2 id="exp-h">Experience</h2></div>
+      <div class="sec-body">
+        <ol class="rows" role="list">
+          {roles.map(({ id, data }) => (
+            <li class="row" id={`role-${id}`}>
+              <div class="when">
+                <span class="year" aria-hidden="true">{data.start.slice(0, 4)}</span>
+                <RoleWhen start={data.start} end={data.end} />
+                <span class="org">{data.note ? `${data.org} · ${data.note}` : data.org}</span>
+              </div>
+              <div class="what">
+                <h3>{data.title}</h3>
+                {data.highlights.length > 0 && <ul class="hl">{data.highlights.map((h) => <li>{h}</li>)}</ul>}
+                <Chips skills={data.skills} />
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
 
-    <section class="grid section" id="education" aria-labelledby="edu-h">
-      <div class="span-label label"><span class="num">03</span><h2 id="edu-h">Education</h2></div>
-      <ol class="span-body rows" role="list">
-        {education.map(({ data }) => (
-          <li class="row"><span class="when">{data.start} – {data.end}</span><div><h3>{data.program}</h3><span class="org">{data.school}</span></div></li>
-        ))}
-      </ol>
+    <section class="sec cgrid" id="education" aria-labelledby="edu-h">
+      <div class="sec-label"><span class="num" aria-hidden="true">03</span><h2 id="edu-h">Education</h2></div>
+      <div class="sec-body">
+        <ol class="rows" role="list">
+          {education.map(({ data }) => (
+            <li class="row">
+              <div class="when">
+                <span class="year" aria-hidden="true">{data.start}</span>
+                <span class="period"><time datetime={String(data.start)}>{data.start}</time> – <time datetime={String(data.end)}>{data.end}</time></span>
+              </div>
+              <div class="what"><h3>{data.program}</h3><span class="org">{data.school}</span></div>
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
 
-    <section class="grid section" id="languages" aria-labelledby="lang-h">
-      <div class="span-label label"><span class="num">04</span><h2 id="lang-h">Languages</h2></div>
-      <dl class="span-body langs">
-        {profile.languages.map((l) => <div><dt>{l.name}</dt><dd>{l.level}</dd></div>)}
-      </dl>
+    <section class="sec cgrid" id="languages" aria-labelledby="lang-h">
+      <div class="sec-label"><span class="num" aria-hidden="true">04</span><h2 id="lang-h">Languages</h2></div>
+      <div class="sec-body">
+        <dl class="langs">
+          {profile.languages.map((l) => <div><dt>{l.name}</dt><dd>{l.level}</dd></div>)}
+        </dl>
+      </div>
     </section>
 
     {latest.length > 0 && (
-      <section class="grid section" id="posts" aria-labelledby="posts-h">
-        <div class="span-label">
-          <div class="label"><span class="num">05</span><h2 id="posts-h">Latest posts</h2></div>
-          <span class="label-sub"><a href={u('/blog/')}>All posts →</a></span>
+      <section class="sec cgrid" id="posts" aria-labelledby="posts-h">
+        <div class="sec-label"><span class="num" aria-hidden="true">05</span><h2 id="posts-h">Latest posts</h2></div>
+        <div class="sec-body">
+          <PostList posts={latest} />
+          <p class="more-row"><a class="more" href={u('/blog/')}>All posts →</a></p>
         </div>
-        <PostList posts={latest} class="span-body" />
       </section>
     )}
   </div>

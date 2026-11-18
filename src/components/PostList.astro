@@ -6,19 +6,18 @@ import { postUrl } from '../lib/url';
 
 interface Props {
   posts: Post[];
-  /** Blog index: h2 titles, chips, bigger type. */
+  /** Blog index: h2 titles and skill links. */
   big?: boolean;
-  class?: string;
 }
-const { posts, big = false, class: className } = Astro.props;
+const { posts, big = false } = Astro.props;
 const Heading = big ? 'h2' : 'h3';
 ---
-<ol class:list={['post-rows', { big }, className]} role="list">
+<ol class="rows" role="list">
   {posts.map((post) => (
-    <li class="post-row">
-      <time class="when" datetime={isoDate(post.data.pubDate)}>{formatDate(post.data.pubDate)}</time>
-      <div>
-        <Heading class:list={{ t: big }}><a href={postUrl(post.id)}>{post.data.title}</a></Heading>
+    <li class="row">
+      <div class="when"><span class="period"><time datetime={isoDate(post.data.pubDate)}>{formatDate(post.data.pubDate)}</time></span></div>
+      <div class="what">
+        <Heading><a class="post-link" href={postUrl(post.id)}>{post.data.title}</a></Heading>
         <p>{post.data.description}</p>
         {big && <Chips skills={post.data.skills} />}
       </div>

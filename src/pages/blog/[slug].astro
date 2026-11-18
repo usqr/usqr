@@ -2,7 +2,6 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Chips from '../../components/Chips.astro';
-import Corner from '../../components/Corner.astro';
 import { getSkill } from '../../data/skills';
 import { getPosts, postsFor, type Post } from '../../lib/content';
 import { formatDate, isoDate } from '../../lib/format';
@@ -22,28 +21,30 @@ const primary = getSkill(data.skills[0]);
 const more = postsFor(posts, primary.id).filter((p) => p.id !== post.id).slice(0, 3);
 ---
 <Base title={data.title} description={data.description} current="blog">
-  <article class="wrap has-corner">
-    <Corner label={primary.name} />
-    <header class="grid page-head">
-      <div class="span-label"><p class="kicker"><span class="usq" aria-hidden="true"></span>Post</p></div>
-      <h1 class="span-body post-title">{data.title}</h1>
+  <article class="wrap" aria-labelledby="post-h">
+    <header class="post-head mgrid">
+      <p class="kicker m"><span class="usq" aria-hidden="true"></span>Post</p>
+      <h1 id="post-h">{data.title}</h1>
     </header>
-    <div class="grid post-grid">
-      <aside class="span-label meta" aria-label="Post details">
+    <div class="mgrid">
+      <aside class="post-meta m" aria-label="Post details">
         <dl>
           <div><dt>Published</dt><dd><time datetime={isoDate(data.pubDate)}>{formatDate(data.pubDate)}</time></dd></div>
           {data.updatedDate && <div><dt>Updated</dt><dd><time datetime={isoDate(data.updatedDate)}>{formatDate(data.updatedDate)}</time></dd></div>}
         </dl>
         <Chips skills={data.skills} />
       </aside>
-      <div class="span-body prose"><Content /></div>
+      <div>
+        <p class="standfirst post-standfirst">{data.description}</p>
+        <div class="prose"><Content /></div>
+      </div>
     </div>
-    <footer class="grid post-foot">
-      <p class="span-label author">Written by <a href={u('/')}>Łukasz Datkowski</a>, frontend developer and UX designer.</p>
+    <footer class="post-foot mgrid">
+      <p class="author m">Written by <a href={u('/')}>Łukasz Datkowski</a>, frontend developer and UX designer.</p>
       {more.length > 0 && (
-        <nav class="span-body" aria-labelledby="more-h">
+        <nav aria-labelledby="more-h">
           <h2 id="more-h">More on {primary.name}</h2>
-          <ul>{more.map((p) => <li><a href={postUrl(p.id)}>{p.data.title}</a></li>)}</ul>
+          <ul class="more-list">{more.map((p) => <li><a class="more" href={postUrl(p.id)}>{p.data.title}</a></li>)}</ul>
         </nav>
       )}
     </footer>

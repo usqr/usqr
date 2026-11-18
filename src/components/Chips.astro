@@ -6,7 +6,7 @@ interface Props { skills: readonly SkillId[] }
 const { skills } = Astro.props;
 ---
 {skills.length > 0 && (
-  <ul class="chips" aria-label="Skills">
-    {skills.map((id) => <li><a class="chip" href={skillUrl(id)}>{getSkill(id).name}</a></li>)}
+  <ul class="tags" aria-label="Skills">
+    {skills.map((id) => <li><a href={skillUrl(id)}>{getSkill(id).name}</a></li>)}
   </ul>
 )}

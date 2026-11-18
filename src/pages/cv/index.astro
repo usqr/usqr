@@ -1,0 +1,99 @@
+---
+// Print CV: two A4 sheets (root-2 page grid). The build makes /cv.pdf from this page (scripts/cv-pdf.mjs).
+// The sheets are light in every theme. DOM order = reading order: ATS tools read the PDF text in this order.
+import Base from '../../layouts/Base.astro';
+import RoleWhen from '../../components/RoleWhen.astro';
+import '../../styles/print.css';
+import { fullName, profile } from '../../data/profile';
+import { areas, getSkill } from '../../data/skills';
+import { getEducation, getRoles } from '../../lib/content';
+import { shortUrl } from '../../lib/format';
+
+// Sheet 1: head, What I do, and the newest roles. Sheet 2: the other roles, education, languages.
+const ROLES_ON_SHEET_1 = 4;
+const [roles, education] = await Promise.all([getRoles(), getEducation()]);
+const sheets = [roles.slice(0, ROLES_ON_SHEET_1), roles.slice(ROLES_ON_SHEET_1)];
+const pages = sheets.length;
+---
+<Base title="Print CV" bodyClass="cvp" mainClass="sheets" description={`${fullName}: CV in two A4 pages, ready to print or save as a PDF.`}>
+  <p slot="before-main" class="cvp-note wrap screen-only">Two A4 pages. Use the print command of your browser to print this page or to save it as a PDF.</p>
+
+  <div class="sheet">
+    <div class="sheet-body">
+      <header class="cv-head pg">
+        <h1 class="name full"><span class="light">{profile.firstName}</span> <span class="bold">{profile.lastName}</span></h1>
+        <p class="hybrid">{profile.hybrid.join(' · ')}</p>
+        <p class="standfirst">{profile.statement}</p>
+        <p class="contact">
+          {profile.links.map((l) => <span>{l.label}: <a href={l.href}>{shortUrl(l.href)}</a></span>)}
+        </p>
+      </header>
+
+      <section class="ps pg" aria-labelledby="p-what">
+        <span class="pnum m" aria-hidden="true">01</span>
+        <h2 id="p-what">What I do</h2>
+        <ul class="p-areas">
+          {areas.map((a) => <li><strong>{a.name}.</strong> {a.statement}</li>)}
+        </ul>
+      </section>
+
+      <section class="ps pg" aria-labelledby="p-exp">
+        <span class="pnum m" aria-hidden="true">02</span>
+        <h2 id="p-exp">Experience</h2>
+        <ol class="p-list pg" role="list">
+          {sheets[0].map(({ data }) => <li class="pi pg">
+            <p class="when m"><RoleWhen start={data.start} end={data.end} /></p>
+            <div>
+              <h3>{data.title}</h3>
+              <span class="org">{data.note ? `${data.org} · ${data.note}` : data.org}</span>
+              {data.highlights.length > 0 && <ul class="hl">{data.highlights.map((h) => <li>{h}</li>)}</ul>}
+              {data.skills.length > 0 && <p class="skills">{data.skills.map((s) => getSkill(s).name).join(' · ')}</p>}
+            </div>
+          </li>)}
+        </ol>
+      </section>
+    </div>
+    <div class="sheet-foot screen-only" aria-hidden="true"><span>{fullName} · CV</span><span>Page 1 of {pages}</span></div>
+  </div>
+
+  <div class="sheet">
+    <div class="sheet-body">
+      {sheets[1].length > 0 && (
+        <section class="ps pg" aria-label="Experience, continued">
+          <p class="cont">Experience, continued</p>
+          <ol class="p-list pg" role="list">
+            {sheets[1].map(({ data }) => <li class="pi pg">
+              <p class="when m"><RoleWhen start={data.start} end={data.end} /></p>
+              <div>
+                <h3>{data.title}</h3>
+                <span class="org">{data.org}</span>
+                {data.highlights.length > 0 && <ul class="hl">{data.highlights.map((h) => <li>{h}</li>)}</ul>}
+                {data.skills.length > 0 && <p class="skills">{data.skills.map((s) => getSkill(s).name).join(' · ')}</p>}
+              </div>
+            </li>)}
+          </ol>
+        </section>
+      )}
+
+      <section class="ps pg" aria-labelledby="p-edu">
+        <span class="pnum m" aria-hidden="true">03</span>
+        <h2 id="p-edu">Education</h2>
+        <ol class="p-list pg" role="list">
+          {education.map(({ data }) => <li class="pi pg">
+            <p class="when m"><time datetime={String(data.start)}>{data.start}</time> – <time datetime={String(data.end)}>{data.end}</time></p>
+            <div><h3>{data.program}</h3><span class="org">{data.school}</span></div>
+          </li>)}
+        </ol>
+      </section>
+
+      <section class="ps pg" aria-labelledby="p-lang">
+        <span class="pnum m" aria-hidden="true">04</span>
+        <h2 id="p-lang">Languages</h2>
+        <dl class="p-langs">
+          {profile.languages.map((l) => <div><dt>{l.name}:</dt> <dd>{l.level}</dd></div>)}
+        </dl>
+      </section>
+    </div>
+    <div class="sheet-foot screen-only" aria-hidden="true"><span>{fullName} · CV</span><span>Page 2 of {pages}</span></div>
+  </div>
+</Base>

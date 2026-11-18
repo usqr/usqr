@@ -1,0 +1,104 @@
+/* Direction D: print CV page (/cv/) and /cv.pdf. Load after tokens.css and site.css.
+ * Source: design/mockups/d/print.css.
+ * A4 is a root-2 rectangle: 210 × 297 mm = 1 : 1.414. All page parts derive from it.
+ *   --u     = 210 mm / (10 × √2) = 14.85 mm   outer side margin
+ *   --m-col = 2 × --u            = 29.7 mm    margin column (section numbers, dates)
+ *   --m-gap = --u / √2           = 10.5 mm    gap between the margin and the text column
+ * Type: base 9.5 pt, steps of ⁴√2 (1.189) and √2 (1.414).
+ * DOM order = paint order = reading order. No positioned or transformed text boxes:
+ * Chromium writes PDF text in paint order, and ATS tools read that order.
+ */
+.cvp {
+  --u: calc(210mm / 14.1421);
+  --m-col: calc(var(--u) * 2);
+  --m-gap: calc(var(--u) / 1.41421);
+  --p0: 9.5pt;
+  --p1: calc(var(--p0) * 1.1892);   /* ⁴√2 */
+  --p2: calc(var(--p0) * 1.41421);  /* √2 */
+  --p6: calc(var(--p0) * 2.82843);  /* (√2)³ */
+}
+
+/* ---------- Screen: show the two sheets ---------- */
+.cvp-note { padding-block: var(--space-5) 0; font-size: var(--text-sm); color: var(--fg-2); }
+.sheets { display: grid; justify-content: center; gap: var(--space-8); padding: var(--space-6) var(--gutter) var(--space-12); }
+
+/* Paper is light in every theme: the sheet sets the light token values again. */
+.sheet {
+  --bg: var(--usqr-snow); --fg: var(--usqr-coal); --fg-2: #5c5b68; --meta: #6b6a76;
+  --border: #d6d5dc; --border-soft: #e6e5ea; --accent: var(--usqr-gold); --accent-text: var(--usqr-gold-text); --link: var(--usqr-sky-text);
+  color-scheme: light;
+  display: flex; flex-direction: column;
+  width: 210mm; min-height: 297mm; padding: 14mm var(--u) 10mm;
+  background: var(--bg); color: var(--fg); border: 1px solid var(--border); box-shadow: var(--elev-raised);
+  font-size: var(--p0); font-weight: 400; line-height: 1.45;
+}
+.sheet-body { flex: 1; padding-top: 6mm; border-top: 1.5pt solid var(--accent); } /* thin gold rule: decoration only */
+.sheet-foot { display: flex; justify-content: space-between; padding-top: 4mm; font-size: 8pt; color: var(--meta); font-variant-numeric: tabular-nums oldstyle-nums; }
+
+/* Root-2 page grid */
+.pg { display: grid; column-gap: var(--m-gap); grid-template-columns: [margin-start] var(--m-col) [margin-end text-start] minmax(0, 1fr) [text-end]; }
+.pg > * { grid-column: text; }
+.pg > .m { grid-column: margin; text-align: end; }
+.pg > .full, .pg > .pg { grid-column: margin-start / text-end; }
+
+/* Head */
+.cv-head { row-gap: 2mm; margin-bottom: 7mm; }
+.sheet .name { font-size: var(--p6); line-height: 1; letter-spacing: 0; }
+.sheet .name span { display: inline; }
+.sheet .hybrid { font-size: var(--p1); }
+.sheet .standfirst { max-width: none; margin-top: 2mm; padding-inline-start: 4mm; border-inline-start-width: 3pt; font-size: var(--p1); line-height: 1.35; }
+.contact { display: flex; flex-wrap: wrap; gap: 0 6mm; margin-top: 1mm; color: var(--fg-2); }
+.contact a { color: var(--fg); text-decoration-color: var(--meta); }
+
+/* Sections: large number in the margin, heading in the text column */
+.ps { row-gap: 2mm; padding-top: 3mm; margin-bottom: 6mm; border-top: 1px solid var(--fg); }
+.ps > .pnum, .ps > h2 { grid-row: 1; }
+.pnum { font-family: var(--font-serif); font-weight: var(--w-serif); font-size: var(--p6); line-height: 0.9; color: var(--meta); font-variant-numeric: oldstyle-nums; }
+.ps h2 { align-self: end; font-size: var(--p2); line-height: 1.1; }
+.cont { align-self: end; font-family: var(--font-serif); font-weight: var(--w-serif); font-size: var(--p1); color: var(--fg-2); }
+.p-areas li + li { margin-top: 1mm; }
+.p-list { row-gap: 3mm; }
+.pi > * { grid-row: 1; }
+.pi .when { display: block; flex-basis: auto; margin: 0; font-size: 8.5pt; color: var(--meta); font-variant-numeric: tabular-nums oldstyle-nums; padding-top: 0.6mm; }
+.pi .period { font-size: inherit; color: inherit; }
+.pi .period .now { color: var(--fg); }
+.pi h3 { font-size: var(--p1); line-height: 1.25; }
+.pi .org { display: block; font-size: inherit; color: var(--fg-2); }
+.sheet ul.hl { margin-top: 1mm; padding-inline-start: 1.1em; }
+.sheet ul.hl li + li { margin-top: 0.5mm; }
+.skills { margin-top: 1mm; font-size: 8.5pt; color: var(--meta); }
+.p-langs { display: flex; flex-wrap: wrap; gap: 0 8mm; }
+.p-langs dt { display: inline; font-weight: 700; }
+.p-langs dd { display: inline; margin: 0; color: var(--fg-2); }
+
+/* Phones and narrow windows: one column, no horizontal scroll */
+@media screen and (max-width: 860px) {
+  .cvp { --p0: 1rem; }
+  .sheets { padding-inline: var(--gutter); }
+  .sheet { width: auto; min-height: 0; padding: var(--space-4); }
+  .pg { grid-template-columns: minmax(0, 1fr); }
+  .pg > *, .pg > .m, .pg > .full, .pg > .pg { grid-column: 1 / -1; text-align: start; }
+  .ps > .pnum, .ps > h2, .pi > * { grid-row: auto; }
+  .pnum { font-size: var(--p2); }
+}
+
+/* ---------- Print ---------- */
+@page {
+  size: A4;
+  margin: 14mm 14.85mm 16mm; /* side margin = --u (var() does not work in @page descriptors) */
+  @bottom-left { content: "Łukasz Datkowski · CV"; font-family: var(--font-sans); font-size: 8pt; color: var(--meta); vertical-align: middle; }
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font-family: var(--font-sans); font-size: 8pt; color: var(--meta); vertical-align: middle; }
+}
+@media print {
+  html:root:root { --bg: #fff; --fg: var(--usqr-coal); --fg-2: #5c5b68; --meta: #6b6a76; --border: #d6d5dc; --border-soft: #e6e5ea;
+                   --link: var(--usqr-coal); --accent-text: var(--usqr-gold-text); --body-weight: 400; --body-leading: 1.45; color-scheme: light; }
+  body.cvp { background: none; }
+  .screen-only { display: none !important; }
+  .sheets { display: block; padding: 0; }
+  .sheet { width: auto; min-height: 0; padding: 0; border: 0; box-shadow: none; background: none; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .sheet-foot { display: none; }
+  .pi, .ps > h2 { break-inside: avoid; }
+  .ps > h2 { break-after: avoid; }
+  a { color: inherit; text-decoration: none; }
+}

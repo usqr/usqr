@@ -23,6 +23,11 @@ export function withBase(base: string, path: string): string {
   return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
 }
 
+/** Short link text for print. "https://www.linkedin.com/in/x/" → "linkedin.com/in/x" */
+export function shortUrl(href: string): string {
+  return href.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+}
+
 /** "1 post", "2 posts" */
 export function countLabel(n: number, noun: string): string {
   return `${n} ${noun}${n === 1 ? '' : 's'}`;

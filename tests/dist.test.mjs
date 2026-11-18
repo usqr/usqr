@@ -56,3 +56,23 @@ test('every internal link and fragment resolves', () => {
     }
   }
 });
+
+test('Bitter is the only serif in the font stacks', () => {
+  const css = files(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  const stacks = [...css.matchAll(/(?:font-family|--font-[\w-]+)\s*:\s*([^;}]+)/g)].map((m) => m[1]);
+  assert.ok(stacks.length > 0);
+  for (const stack of stacks) {
+    assert.doesNotMatch(stack, /Georgia|Times|Cambria|Palatino|ui-serif|(?<![\w-])serif\b/i, stack);
+  }
+});
+
+// Bitter has no tabular oldstyle figures: with tabular-nums, its tnum changes the figures back to lining.
+test('the serif numerals use oldstyle figures without tabular-nums', () => {
+  const css = files(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  for (const sel of ['.num', '.year', '.pnum']) {
+    const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter((m) => m[1].split(',').some((s) => s.trim() === sel));
+    const decl = rules.map((m) => m[2]).join(';');
+    assert.match(decl, /font-variant-numeric:\s*oldstyle-nums/, sel);
+    assert.doesNotMatch(decl, /tabular-nums/, sel);
+  }
+});

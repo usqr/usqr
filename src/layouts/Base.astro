@@ -2,7 +2,7 @@
 import '../styles/tokens.css';
 import '../styles/site.css';
 import lato400 from '../styles/fonts/lato-400.woff2?url';
-import slab from '../styles/fonts/roboto-slab-var.woff2?url';
+import slab from '../styles/fonts/bitter-var.woff2?url';
 import { fullName, profile } from '../data/profile';
 import { u } from '../lib/url';
 
@@ -10,9 +10,12 @@ interface Props {
   title?: string;
   description?: string;
   current?: 'cv' | 'blog' | 'colophon';
+  /** d2 = CV page (√2 type scale), cvp = print CV page. */
+  bodyClass?: string;
+  mainClass?: string;
 }
 
-const { title, description = profile.statement, current } = Astro.props;
+const { title, description = profile.statement, current, bodyClass, mainClass } = Astro.props;
 const pageTitle = title ? `${title} — ${fullName}` : `${fullName} — Frontend, UX, design systems`;
 const nav = [
   { id: 'cv', label: 'CV', href: u('/') },
@@ -51,16 +54,16 @@ const year = new Date().getFullYear();
 {goatcounter && <script is:inline async data-goatcounter={`https://${goatcounter}.goatcounter.com/count`} src="https://gc.zgo.at/count.js"></script>}
 <slot name="head" />
 </head>
-<body>
+<body class={bodyClass}>
 <a class="skip" href="#main">Skip to content</a>
 {goatcounter && (
   <noscript><img class="gc" src={`https://${goatcounter}.goatcounter.com/count?p=${encodeURIComponent(Astro.url.pathname)}`} alt="" width="1" height="1"></noscript>
 )}
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href={u('/')}><span class="light">{profile.firstName}</span><span class="bold">{profile.lastName}</span></a>
-    <nav class="nav" aria-label="Main">
-      <ul>
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href={u('/')}><span class="usq" aria-hidden="true"></span><span class="light">{profile.firstName}</span> <span class="bold">{profile.lastName}</span></a>
+    <nav aria-label="Main">
+      <ul class="nav">
         {nav.map((item) => (
           <li><a href={item.href} aria-current={item.id === current ? 'page' : undefined}>{item.label}</a></li>
         ))}
@@ -68,23 +71,20 @@ const year = new Date().getFullYear();
     </nav>
   </div>
 </header>
-<main id="main">
+<slot name="before-main" />
+<main id="main" class={mainClass}>
   <slot />
 </main>
-<footer class="site-footer lattice">
+<footer class="site-foot lattice">
   <div class="wrap">
-    <div class="grid footer-grid">
-      <div class="span-label"><span class="label"><span class="usq" aria-hidden="true"></span><span class="num">Contact</span></span></div>
-      <div class="span-body">
-        <p class="footer-call">Hiring for a hybrid role? Let’s talk.</p>
-        <ul class="footer-links">
-          {profile.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-          <li><a href={u('/rss.xml')}>RSS</a></li>
-        </ul>
-        <p class="colophon"><a href={u('/colophon/')}>How this site is built →</a></p>
-        <p class="footer-meta">© {year} {fullName}</p>
-      </div>
-    </div>
+    <p class="call">Hiring for a hybrid role? Let’s talk.</p>
+    <ul class="foot-links">
+      {profile.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      <li><a href={u('/cv/')}>Print CV</a></li>
+      <li><a href={u('/rss.xml')}>RSS</a></li>
+      <li><a href={u('/colophon/')}>Colophon</a></li>
+    </ul>
+    <p class="foot-meta">© {year} {fullName} · Static HTML and CSS. No cookies.</p>
   </div>
 </footer>
 </body>

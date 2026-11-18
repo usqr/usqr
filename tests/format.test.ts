@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { compareRoles, countLabel, formatDate, formatMonth, isoDate, withBase } from '../src/lib/format.ts';
+import { compareRoles, countLabel, formatDate, formatMonth, isoDate, shortUrl, withBase } from '../src/lib/format.ts';
 
 test('formatDate uses day, short month, year in UTC', () => {
   assert.equal(formatDate(new Date('2027-01-05')), '5 Jan 2027');
@@ -33,4 +33,9 @@ test('compareRoles puts current roles first, then the newest end, then the newes
     { id: 'mid', start: '2020-07', end: '2025-08' },
   ];
   assert.deepEqual(roles.sort(compareRoles).map((r) => r.id), ['senior', 'self', 'mid', 'old']);
+});
+
+test('shortUrl drops the protocol, www, and the trailing slash', () => {
+  assert.equal(shortUrl('https://www.linkedin.com/in/lukasz-datkowski/'), 'linkedin.com/in/lukasz-datkowski');
+  assert.equal(shortUrl('https://github.com/usqr'), 'github.com/usqr');
 });

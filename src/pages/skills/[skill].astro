@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Corner from '../../components/Corner.astro';
 import PostList from '../../components/PostList.astro';
 import RoleWhen from '../../components/RoleWhen.astro';
 import { getArea } from '../../data/skills';
@@ -19,26 +18,28 @@ const sections = [posts.length > 0 && 'posts', roles.length > 0 && 'roles'].filt
 const num = (id: string) => String(sections.indexOf(id) + 1).padStart(2, '0');
 ---
 <Base title={`${skill.name} (skill)`} description={`Posts and roles that show the skill ${skill.name}.`}>
-  <div class="wrap has-corner">
-    <Corner label="Skill" />
-    <header class="grid page-head">
-      <div class="span-label"><p class="kicker"><span class="usq" aria-hidden="true"></span>Skill</p><p class="count">Area: <a href={u(`/skills/#${area.id}`)}>{area.name}</a></p></div>
-      <div class="span-body"><h1 class="page-title">{skill.name}</h1><p class="lede">The posts and roles on this page show this skill.</p></div>
+  <div class="wrap">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Skill</p><p class="count">Area: <a href={u(`/skills/#${area.id}`)}>{area.name}</a></p></div>
+      <div><h1>{skill.name}</h1><p class="lede">The posts and roles on this page show this skill.</p></div>
     </header>
     {posts.length > 0 && (
-      <section class="grid section" id="posts" aria-labelledby="posts-h">
-        <div class="span-label label"><span class="num">{num('posts')}</span><h2 id="posts-h">Posts</h2></div>
-        <div class="span-body"><PostList posts={posts} /></div>
+      <section class="sec mgrid" id="posts" aria-labelledby="posts-h">
+        <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('posts')}</span><h2 id="posts-h">Posts</h2></div>
+        <PostList posts={posts} />
       </section>
     )}
     {roles.length > 0 && (
-      <section class="grid section" id="roles" aria-labelledby="roles-h">
-        <div class="span-label label"><span class="num">{num('roles')}</span><h2 id="roles-h">Roles</h2></div>
-        <div class="span-body"><ol class="rows" role="list">
+      <section class="sec mgrid" id="roles" aria-labelledby="roles-h">
+        <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('roles')}</span><h2 id="roles-h">Roles</h2></div>
+        <ol class="rows" role="list">
           {roles.map(({ id, data }) => (
-            <li class="row"><RoleWhen start={data.start} end={data.end} /><div><h3><a href={u(`/#role-${id}`)}>{data.title}</a></h3><span class="org">{data.org}</span></div></li>
+            <li class="row">
+              <div class="when"><RoleWhen start={data.start} end={data.end} /></div>
+              <div class="what"><h3><a href={u(`/#role-${id}`)}>{data.title}</a></h3><span class="org">{data.org}</span></div>
+            </li>
           ))}
-        </ol></div>
+        </ol>
       </section>
     )}
   </div>
