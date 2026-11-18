@@ -342,3 +342,6 @@ a:hover { text-decoration-color: var(--accent); text-decoration-thickness: 2px; 
 .gc { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
 .post-grid { row-gap: var(--space-6); }
+
+/* Separate links (not in a sentence): target min. 24px (WCAG 2.5.8) */
+.colophon a, .page-head .count a { display: inline-flex; align-items: center; min-height: 24px; }
