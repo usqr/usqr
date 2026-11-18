@@ -304,6 +304,9 @@ a:hover { text-decoration-color: var(--accent); text-decoration-thickness: 2px; 
   body { font-size: 10.5pt; line-height: 1.45; }
   .site-header, .site-footer, .chips, .strip, .corner, .hero-links, #posts, .skip, .no-print, .areas a, .label-sub { display: none !important; }
   .lattice { background-image: none !important; }
+  /* Chromium writes PDF text in paint order, and positioned boxes paint last. Keep text boxes static so the ATS reads the name first. */
+  .has-corner, .areas li, .areas li:first-child, .row ul.hl li { position: static; }
+  .row ul.hl li::before { position: static; display: inline-block; vertical-align: 0.15em; margin: 0 calc(var(--space-5) - 0.4rem) 0 calc(-1 * var(--space-5)); }
   .hero { padding: 0; border: 0; } .hero-panel { padding: 0; }
   .areas li, .post-row { border: 0 !important; padding: 0 !important; }
   .areas li::before, .areas li::after { display: none; }
