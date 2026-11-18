@@ -82,11 +82,16 @@ time, .tnum { font-variant-numeric: tabular-nums oldstyle-nums; }
 .brand .usq { margin-inline-end: var(--space-1); }
 .brand .light { font-weight: 300; }
 .brand .bold { font-weight: 700; }
-.nav { display: flex; gap: var(--space-4); }
-.nav a { display: inline-flex; align-items: center; min-height: 44px; padding-inline: var(--space-1); border-bottom: 2px solid transparent;
+.nav { display: flex; gap: var(--space-2); }
+.nav a { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; padding-inline: var(--space-1);
          color: var(--fg-2); text-decoration: none; font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-.nav a:hover { color: var(--fg); border-bottom-color: var(--border); }
-.nav a[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+/* Vertical bar before the label, as the standfirst border. Each link keeps the space, so the labels do not move. */
+.nav a::before { content: ""; flex: none; inline-size: 4px; block-size: 1.25em; background: transparent; }
+.nav a:hover { color: var(--fg); }
+.nav a:hover::before { background: var(--border); }
+/* Current page: accent-text, not gold, so that the bar has 3:1 non-text contrast in light mode (gold on snow: 1.88). */
+.nav a[aria-current="page"] { color: var(--fg); }
+.nav a[aria-current="page"]::before { background: var(--accent-text); }
 
 /* ---------- Shared type pieces ---------- */
 .kicker { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-serif); font-weight: var(--w-serif); font-size: var(--text-xs);
