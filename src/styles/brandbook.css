@@ -29,8 +29,8 @@
 .bb-title-mark { inline-size: 0.95em; color: var(--accent); }
 .un { font-family: var(--font-sans); font-weight: 300; }
 .sq { font-family: var(--font-sans); font-weight: 400; }
-/* Logotype: the same gold-text in the two themes (3.16 : 1 on ink, large text). */
-.bb-title .sq { color: var(--usqr-gold-text); }
+/* Logotype: the original gold in the two themes. WCAG 1.4.3 has no contrast minimum for logotypes. */
+.bb-title .sq { color: var(--usqr-gold); }
 
 .bb-flow { max-width: var(--measure); }
 .bb-flow > * + * { margin-top: var(--space-4); }

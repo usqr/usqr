@@ -4,11 +4,11 @@
  */
 
 /* ---------- Theme hooks (dark: body text one weight lighter, more leading) ---------- */
-:root { color-scheme: light; --body-weight: 400; --body-leading: var(--leading-body); }
+:root { color-scheme: light; --body-weight: 400; --body-leading: var(--leading-body); --current-bar: var(--usqr-coal); }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { color-scheme: dark; --body-weight: 300; --body-leading: 1.7; }
+  :root:not([data-theme="light"]) { color-scheme: dark; --body-weight: 300; --body-leading: 1.7; --current-bar: var(--usqr-gold); }
 }
-:root[data-theme="dark"] { color-scheme: dark; --body-weight: 300; --body-leading: 1.7; }
+:root[data-theme="dark"] { color-scheme: dark; --body-weight: 300; --body-leading: 1.7; --current-bar: var(--usqr-gold); }
 
 /* ---------- Layout constants (derived from tokens) ---------- */
 :root {
@@ -95,9 +95,9 @@ time, .tnum { font-variant-numeric: tabular-nums oldstyle-nums; }
 }
 .nav a:hover { color: var(--fg); }
 .nav a:hover::before { background: var(--border); }
-/* Current page: accent-text, not gold, so that the bar has 3:1 non-text contrast in light mode (gold on snow: 1.88). */
+/* Current page: coal in light (gold on snow is 1.88, below 3:1 non-text contrast), original gold in dark (7.62). */
 .nav a[aria-current="page"] { color: var(--fg); }
-.nav a[aria-current="page"]::before { background: var(--accent-text); }
+.nav a[aria-current="page"]::before { background: var(--current-bar); }
 
 /* Theme switch: shown by JS only (hidden attribute). Knob left = light, right = dark. 44px tap target. */
 /* Phones and small tablets: brand and switch on line 1, nav on line 2. Wider: brand · nav · switch on one line. */

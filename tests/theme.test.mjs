@@ -76,14 +76,17 @@ test('without JavaScript the switch stays hidden', async () => {
   await context.close();
 });
 
-test('the brandbook logotype keeps gold-text in the two themes', async () => {
+test('the logotype and the current nav bar use gold or coal, not gold-text', async () => {
   const colors = [];
   for (const colorScheme of ['light', 'dark']) {
     const context = await browser.newContext({ colorScheme });
     const page = await context.newPage();
     await page.goto(at('/sidequests/brandbook/'));
     colors.push(await page.locator('.bb-title .sq').evaluate((el) => getComputedStyle(el).color));
+    colors.push(await page.locator('.nav a[aria-current="page"]').evaluate((el) => getComputedStyle(el, '::before').backgroundColor));
     await context.close();
   }
-  assert.deepEqual(colors, ['rgb(158, 102, 0)', 'rgb(158, 102, 0)']);
+  const gold = 'rgb(255, 164, 0)';
+  const coal = 'rgb(64, 63, 76)';
+  assert.deepEqual(colors, [gold, coal, gold, gold]);
 });
