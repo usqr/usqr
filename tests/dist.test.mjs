@@ -23,10 +23,10 @@ test('dist exists with the places from the flow', () => {
   }
 });
 
-test('pages ship no JavaScript except count.js and the print shortcut (NoLoJS)', () => {
+test('pages ship no JavaScript except count.js, the print shortcut, and the theme switch (NoLoJS)', () => {
   for (const { name, html } of pages) {
     const scripts = html.match(/<script\b[^>]*>/gi) ?? [];
-    for (const tag of scripts) assert.match(tag, /src="https:\/\/gc\.zgo\.at\/count\.js"|data-print-shortcut/, `${name}: ${tag}`);
+    for (const tag of scripts) assert.match(tag, /src="https:\/\/gc\.zgo\.at\/count\.js"|data-print-shortcut|data-theme-init|data-theme-script/, `${name}: ${tag}`);
   }
 });
 
@@ -101,5 +101,16 @@ test('the header logo and the favicon are the fat brandmark', () => {
   for (const { name, html } of pages) {
     const brand = html.match(/<a class="brand"[\s\S]*?<\/a>/)?.[0];
     if (brand) assert.ok(brand.includes(fat), name);
+  }
+});
+
+test('every page has the theme switch, hidden until JS shows it', () => {
+  for (const { name, html } of pages) {
+    const sw = html.match(/<button\b[^>]*data-theme-switch[^>]*>/gi) ?? [];
+    assert.equal(sw.length, 1, name);
+    assert.match(sw[0], /\shidden[\s>]/, `${name}: hidden`);
+    assert.match(sw[0], /role="switch"/, `${name}: role`);
+    const head = html.slice(0, html.indexOf('</head>'));
+    assert.ok(head.includes('data-theme-init'), `${name}: saved theme applies in <head>`);
   }
 });

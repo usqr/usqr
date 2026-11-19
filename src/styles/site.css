@@ -1,5 +1,5 @@
 /* Direction D2: art-directed CV site. Source: design/mockups/d/site.css, brief: design/art-direction/brief.md.
- * Load tokens.css first. No JavaScript: theme = prefers-color-scheme + [data-theme] on <html>.
+ * Load tokens.css first. Theme = prefers-color-scheme, or [data-theme] on <html> from the theme switch (JS).
  * Principles: Precise (every size from a ratio) · One unsquare per view · Proof, not claims.
  */
 
@@ -98,6 +98,24 @@ time, .tnum { font-variant-numeric: tabular-nums oldstyle-nums; }
 /* Current page: accent-text, not gold, so that the bar has 3:1 non-text contrast in light mode (gold on snow: 1.88). */
 .nav a[aria-current="page"] { color: var(--fg); }
 .nav a[aria-current="page"]::before { background: var(--accent-text); }
+
+/* Theme switch: shown by JS only (hidden attribute). Knob left = light, right = dark. 44px tap target. */
+/* Phones and small tablets: brand and switch on line 1, nav on line 2. Wider: brand · nav · switch on one line. */
+.theme-switch { margin-inline-start: auto; }
+.head-row nav { flex-basis: 100%; }
+@media (min-width: 48em) {
+  .theme-switch { order: 1; margin-inline-start: 0; }
+  .head-row nav { flex-basis: auto; margin-inline-start: auto; }
+}
+.theme-switch { display: inline-flex; align-items: center; min-block-size: 44px; padding: 0 var(--space-1); margin: 0;
+                border: 0; background: none; color: inherit; cursor: pointer; }
+.theme-switch[hidden] { display: none; }
+.theme-switch::before { content: ""; position: relative; inline-size: 36px; block-size: 20px; border: 1px solid var(--fg-2); border-radius: 10px; }
+.theme-knob { position: absolute; inline-size: 12px; block-size: 12px; margin-inline-start: 5px; border-radius: 50%; background: var(--fg-2);
+              transition: transform var(--motion-base) var(--ease-standard), background-color var(--motion-base) var(--ease-standard); }
+.theme-switch[aria-checked="true"] .theme-knob { transform: translateX(16px); background: var(--accent); }
+.theme-switch:hover::before { border-color: var(--fg); }
+@media (prefers-reduced-motion: reduce) { .theme-knob { transition: none; } }
 
 /* ---------- Shared type pieces ---------- */
 .kicker { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-serif); font-weight: var(--w-serif); font-size: var(--text-xs);

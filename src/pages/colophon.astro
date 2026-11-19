@@ -55,11 +55,11 @@ const title = (id: SectionId) => sections.find((s) => s.id === id)!.title;
     </section>
     <section class="sec mgrid" id="nolojs" aria-labelledby="nolojs-h">
       <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('nolojs')}</span><h2 id="nolojs-h">{title('nolojs')}</h2></div>
-      <p class="prose-p">Every page works without JavaScript. Links, layout, print, and the light and dark themes are plain HTML and CSS.</p>
+      <p class="prose-p">Every page works without JavaScript. Links, layout, print, and the light and dark themes are plain HTML and CSS. Two small scripts add extras: a switch for the light or dark theme, and Cmd/Ctrl+P for the print CV. Without JavaScript, the theme follows your system setting.</p>
     </section>
     <section class="sec mgrid" id="analytics" aria-labelledby="analytics-h">
       <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('analytics')}</span><h2 id="analytics-h">{title('analytics')}</h2></div>
-      <p class="prose-p">I count visits with GoatCounter. It sets no cookies and keeps no personal data. Its small script is the only JavaScript on the site. Without JavaScript, an image counts the visit.</p>
+      <p class="prose-p">I count visits with GoatCounter. It sets no cookies and keeps no personal data. Without JavaScript, an image counts the visit.</p>
     </section>
     <section class="sec mgrid" id="print" aria-labelledby="print-h">
       <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('print')}</span><h2 id="print-h">{title('print')}</h2></div>

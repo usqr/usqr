@@ -54,6 +54,10 @@ const year = new Date().getFullYear();
 <link rel="preload" href={lato400} as="font" type="font/woff2" crossorigin>
 <link rel="preload" href={slab} as="font" type="font/woff2" crossorigin>
 {goatcounter && <script is:inline async data-goatcounter={`https://${goatcounter}.goatcounter.com/count`} src="https://gc.zgo.at/count.js"></script>}
+<script is:inline data-theme-init>
+// Apply the saved theme before the first paint. Without a saved theme, CSS follows prefers-color-scheme.
+try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}
+</script>
 <slot name="head" />
 </head>
 <body class={bodyClass}>
@@ -64,6 +68,7 @@ const year = new Date().getFullYear();
 <header class="site-head">
   <div class="wrap head-row">
     <a class="brand" href={u('/')}><Brandmark weight="fat" class="brand-mark" /><span class="light">{profile.firstName}</span> <span class="bold">{profile.lastName}</span></a>
+    <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark theme" hidden data-theme-switch><span class="theme-knob" aria-hidden="true"></span></button>
     <nav aria-label="Main">
       <ul class="nav">
         {nav.map((item) => (
@@ -101,6 +106,28 @@ if (location.pathname !== cv) {
   history.replaceState(null, '', cv);
   addEventListener('load', () => document.fonts.ready.then(() => print()));
 }
+</script>
+<script is:inline data-theme-script>
+// Progressive enhancement: the switch shows only with JS. Its start position is the current theme (saved or system).
+// A choice equal to the system theme clears the saved value, so the page follows the system again.
+(() => {
+  const btn = document.querySelector('[data-theme-switch]');
+  if (!btn) return;
+  const root = document.documentElement;
+  const mq = matchMedia('(prefers-color-scheme: dark)');
+  const system = () => (mq.matches ? 'dark' : 'light');
+  const current = () => root.dataset.theme ?? system();
+  const save = (t) => { try { t ? localStorage.setItem('theme', t) : localStorage.removeItem('theme'); } catch {} };
+  const sync = () => btn.setAttribute('aria-checked', String(current() === 'dark'));
+  btn.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    if (next === system()) { delete root.dataset.theme; save(null); } else { root.dataset.theme = next; save(next); }
+    sync();
+  });
+  mq.addEventListener('change', sync);
+  sync();
+  btn.hidden = false;
+})();
 </script>
 </body>
 </html>
