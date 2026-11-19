@@ -84,3 +84,22 @@ test('the serif numerals use oldstyle figures without tabular-nums', () => {
     assert.doesNotMatch(decl, /tabular-nums/, sel);
   }
 });
+
+test('the main nav links to Sidequests on every page', () => {
+  for (const { name, html } of pages) {
+    const nav = html.match(/<nav aria-label="Main">[\s\S]*?<\/nav>/)?.[0] ?? '';
+    assert.ok(nav.includes(`href="${base}/sidequests/"`), name);
+  }
+  for (const p of ['sidequests/index.html', 'sidequests/brandbook/index.html']) assert.ok(existsSync(join(dist, p)), `missing ${p}`);
+});
+
+test('the header logo and the favicon are the fat brandmark', () => {
+  const fat = 'M60.3,12.5C73.9,12.6';
+  const icon = readFileSync(join(dist, 'favicon.svg'), 'utf8');
+  assert.ok(icon.includes(fat), 'favicon');
+  assert.doesNotMatch(icon, /<rect/, 'favicon has no tile');
+  for (const { name, html } of pages) {
+    const brand = html.match(/<a class="brand"[\s\S]*?<\/a>/)?.[0];
+    if (brand) assert.ok(brand.includes(fat), name);
+  }
+});

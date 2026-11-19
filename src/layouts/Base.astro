@@ -3,13 +3,14 @@ import '../styles/tokens.css';
 import '../styles/site.css';
 import lato400 from '../styles/fonts/lato-400.woff2?url';
 import slab from '../styles/fonts/bitter-var.woff2?url';
+import Brandmark from '../components/Brandmark.astro';
 import { fullName, profile } from '../data/profile';
 import { u } from '../lib/url';
 
 interface Props {
   title?: string;
   description?: string;
-  current?: 'cv' | 'blog' | 'colophon';
+  current?: 'cv' | 'blog' | 'sidequests' | 'colophon';
   /** d2 = CV page (√2 type scale), cvp = print CV page. */
   bodyClass?: string;
   mainClass?: string;
@@ -20,6 +21,7 @@ const pageTitle = title ? `${title} — ${fullName}` : `${fullName} — Frontend
 const nav = [
   { id: 'cv', label: 'CV', href: u('/') },
   { id: 'blog', label: 'Blog', href: u('/blog/') },
+  { id: 'sidequests', label: 'Sidequests', href: u('/sidequests/') },
   { id: 'colophon', label: 'Colophon', href: u('/colophon/') },
 ] as const;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -61,7 +63,7 @@ const year = new Date().getFullYear();
 )}
 <header class="site-head">
   <div class="wrap head-row">
-    <a class="brand" href={u('/')}><span class="usq" aria-hidden="true"></span><span class="light">{profile.firstName}</span> <span class="bold">{profile.lastName}</span></a>
+    <a class="brand" href={u('/')}><Brandmark weight="fat" class="brand-mark" /><span class="light">{profile.firstName}</span> <span class="bold">{profile.lastName}</span></a>
     <nav aria-label="Main">
       <ul class="nav">
         {nav.map((item) => (

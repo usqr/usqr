@@ -4,8 +4,11 @@ import { readFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 
 const font = (f) => `data:font/woff2;base64,${readFileSync(new URL(`../src/styles/fonts/${f}`, import.meta.url)).toString('base64')}`;
-const icon = readFileSync(new URL('../public/favicon.svg', import.meta.url), 'utf8');
-const ring = icon.replace(/<rect[^>]*\/>/, ''); // the gold ring without the coal tile
+// favicon.svg = the fat brandmark in gold (viewBox 0 0 120 120.5), no tile.
+const ring = readFileSync(new URL('../public/favicon.svg', import.meta.url), 'utf8');
+const path = ring.match(/<path[^>]*\/>/)[0];
+// The touch icon: the ring on a full coal square, 20 units of space on each side. iOS rounds the corners itself.
+const tile = `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="-20 -19.75 160 160"><rect x="-20" y="-19.75" width="160" height="160" fill="#403f4c"/>${path}</svg>`;
 
 const og = `<!doctype html><style>
 @font-face { font-family: Lato; font-weight: 300; src: url(${font('lato-300.woff2')}); }
@@ -28,9 +31,7 @@ try {
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({ path: 'public/og.png' });
   await page.setViewportSize({ width: 180, height: 180 });
-  // iOS rounds the corners itself, so the touch icon is a full square.
-  const square = icon.replace('rx="32"', 'rx="0"').replace('<svg ', '<svg width="180" height="180" ');
-  await page.setContent(`<body style="margin:0">${square}</body>`);
+  await page.setContent(`<body style="margin:0">${tile}</body>`);
   await page.screenshot({ path: 'public/apple-touch-icon.png' });
   console.log('og.png, apple-touch-icon.png: done');
 } finally {

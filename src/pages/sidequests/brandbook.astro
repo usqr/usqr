@@ -1,0 +1,262 @@
+---
+import Base from '../../layouts/Base.astro';
+import Brandmark from '../../components/Brandmark.astro';
+import { logoSchemes, palette, type MarkWeight } from '../../data/brand';
+import { u } from '../../lib/url';
+import '../../styles/brandbook.css';
+
+const sections = [
+  { id: 'idea', title: 'Idea' },
+  { id: 'logo', title: 'Logo' },
+  { id: 'mark', title: 'Brandmark' },
+  { id: 'color', title: 'Color' },
+  { id: 'type', title: 'Type' },
+  { id: 'pattern', title: 'Pattern' },
+  { id: 'ornament', title: 'Ornament' },
+  { id: 'portrait', title: 'Portrait' },
+  { id: 'web', title: 'On this site' },
+  { id: 'rules', title: 'Rules' },
+] as const;
+type SectionId = (typeof sections)[number]['id'];
+const num = (id: SectionId) => String(sections.findIndex((s) => s.id === id) + 1).padStart(2, '0');
+const title = (id: SectionId) => sections.find((s) => s.id === id)!.title;
+
+const weights: { id: MarkWeight; name: string; use: string }[] = [
+  { id: 'main', name: 'Main', use: 'Thin ring. With the wordmark, at 48 px and larger.' },
+  { id: 'fat', name: 'Fat', use: 'Thick ring. Alone at small sizes: the favicon and the header of this site.' },
+  { id: 'full', name: 'Full', use: 'Solid. Dots and bullets, smaller than 16 px.' },
+];
+const markColors = ['gold', 'coal', 'sky', 'lava', 'sun', 'snow'] as const;
+const altSchemes = logoSchemes.filter((s) => s.id !== 'gold-coal');
+---
+<Base title="Brandbook" current="sidequests" description="The unsquare brandbook: logo, brandmark, color, type, pattern, and the rules that this site obeys.">
+  <div class="wrap bb">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Sidequest</p><p class="count"><a href={u('/sidequests/')}>All sidequests</a></p></div>
+      <div>
+        <h1 class="bb-title"><Brandmark weight="main" class="bb-title-mark" /><span><span class="un">un</span><span class="sq">square</span></span> brandbook</h1>
+        <p class="lede">A square that is not quite square. This page collects my brand in one place: the print brandbook, the generated assets, and the web rules of this site.</p>
+      </div>
+    </header>
+
+    <section class="sec mgrid" id="idea" aria-labelledby="idea-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('idea')}</span><h2 id="idea-h">{title('idea')}</h2></div>
+      <div class="bb-flow">
+        <p>The idea is in the name. The brandmark has four soft sides and no right angle. It is a square that is almost square, and the small difference makes it a mark.</p>
+        <p>The same idea gives the first rule of this site: one deliberate break in each view. A rotation, a bleed, or a jump in scale. One break makes a focal point.</p>
+        <dl class="bb-facts">
+          <div><dt>Name</dt><dd>unsquare, short form usqr</dd></div>
+          <div><dt>First files</dt><dd>2016</dd></div>
+          <div><dt>Asset set</dt><dd>May 2021, 8 colors for each logo and mark</dd></div>
+          <div><dt>Brandbook</dt><dd>Version 026a, April 2024</dd></div>
+          <div><dt>Web edition</dt><dd>This page, 2026: tokens, text-safe colors, dark theme</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="logo" aria-labelledby="logo-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('logo')}</span><h2 id="logo-h">{title('logo')}</h2></div>
+      <div class="bb-flow">
+        <p>The logo is the brandmark and the wordmark. The wordmark has two weights: “un” in Lato Thin and “square” in Lato Regular. The light half is the joke, the strong half is the word.</p>
+        <h3>Main layout</h3>
+        <ul class="bb-tiles bb-tiles-2" role="list">
+          {logoSchemes.map((s) => (
+            <li>
+              <figure class={`bb-tile on-${s.ground}`}>
+                <span class={`logo logo-main c-${s.square}`} role="img" aria-label="unsquare logo">
+                  <Brandmark weight="main" class={`logo-mark c-${s.mark}`} /><span><span class={`un c-${s.un}`}>un</span><span class="sq">square</span></span>
+                </span>
+              </figure>
+              <p class="bb-cap">{s.label}</p>
+            </li>
+          ))}
+        </ul>
+        <h3>Alternative layout</h3>
+        <p>Use the stacked version when the space is tall and narrow. Use it sparingly.</p>
+        <ul class="bb-tiles bb-tiles-3" role="list">
+          {altSchemes.map((s) => (
+            <li>
+              <figure class={`bb-tile on-${s.ground}`}>
+                <span class={`logo logo-alt c-${s.square}`} role="img" aria-label="unsquare logo, stacked">
+                  <Brandmark weight="main" class={`logo-mark c-${s.mark}`} /><span><span class={`un c-${s.un}`}>un</span><span class="sq">square</span></span>
+                </span>
+              </figure>
+              <p class="bb-cap">{s.label}</p>
+            </li>
+          ))}
+        </ul>
+        <p class="bb-note">When the medium has no grayscale, use solid black or solid white. On this site the wordmark uses Lato Light: the web font files have no Thin weight.</p>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="mark" aria-labelledby="mark-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('mark')}</span><h2 id="mark-h">{title('mark')}</h2></div>
+      <div class="bb-flow">
+        <p>The brandmark has one outer shape and three weights. The ring gets thicker as the mark gets smaller, so the shape stays clear.</p>
+        <ul class="bb-weights" role="list">
+          {weights.map((w) => (
+            <li>
+              <div class="bb-weight-sizes" aria-hidden="true">
+                <Brandmark weight={w.id} class="s96" /><Brandmark weight={w.id} class="s48" /><Brandmark weight={w.id} class="s24" /><Brandmark weight={w.id} class="s16" />
+              </div>
+              <h3>{w.name}</h3>
+              <p>{w.use}</p>
+            </li>
+          ))}
+        </ul>
+        <h3>Colors</h3>
+        <p>Each weight comes in the brand colors and in solid black and white. Gold is the default.</p>
+        <ul class="bb-mark-colors" role="list">
+          {markColors.map((c) => (
+            <li class={c === 'snow' ? 'on-coal' : 'on-snow'}><Brandmark weight="fat" class={`c-${c}`} label={`Fat brandmark in ${c}`} /><span>{c}</span></li>
+          ))}
+        </ul>
+        <p class="bb-note"><a href={u('/favicon.svg')} download="unsquare-brandmark-fat-gold.svg">Download the fat brandmark (SVG, gold)</a></p>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="color" aria-labelledby="color-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('color')}</span><h2 id="color-h">{title('color')}</h2></div>
+      <div class="bb-flow">
+        <p>Three main colors, three secondary colors, and one warm gray. The web edition adds a dark ground and text-safe versions of gold, sky, and lava.</p>
+        {palette.map((g) => (
+          <div class="bb-group">
+            <h3>{g.group}</h3>
+            <p class="bb-note">{g.note}</p>
+            <ul class="bb-swatches" role="list">
+              {g.swatches.map((s) => (
+                <li class="bb-swatch fold">
+                  <div class={`chip c-bg-${s.id} c-${s.on}`}><span>{s.id}</span></div>
+                  <dl>
+                    <div><dt>HEX</dt><dd><code>{s.hex}</code></dd></div>
+                    <div><dt>RGB</dt><dd>{s.rgb}</dd></div>
+                    {s.cmyk && <div><dt>CMYK</dt><dd>{s.cmyk}</dd></div>}
+                    <div><dt>Token</dt><dd><code>--usqr-{s.id}</code></dd></div>
+                  </dl>
+                  <p>{s.use}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="type" aria-labelledby="type-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('type')}</span><h2 id="type-h">{title('type')}</h2></div>
+      <div class="bb-flow">
+        <p>Two families. Lato is the voice of the logo and the text. Bitter gives the headings, the labels, and the numerals. Bitter is the only serif.</p>
+        <div class="bb-specimens">
+          <figure class="bb-spec spec-lato">
+            <p class="spec-aa" aria-hidden="true"><span class="w300">A</span><span class="w700">a</span></p>
+            <figcaption><strong>Lato</strong> 300 · 400 · 700. Text, interface, wordmark.</figcaption>
+            <p class="spec-row"><span class="w300">Light</span> <span>Regular</span> <span class="w700">Bold</span></p>
+          </figure>
+          <figure class="bb-spec spec-bitter">
+            <p class="spec-aa" aria-hidden="true">Aa</p>
+            <figcaption><strong>Bitter</strong> 485 · 715. Headings, labels, numerals.</figcaption>
+            <p class="spec-row spec-num">1 2 3 4 5 6 7 8 9 0</p>
+          </figure>
+        </div>
+        <h3>The light and bold pair</h3>
+        <p>The wordmark sets the pattern: a light word, then a bold word. The site uses it for my name.</p>
+        <p class="bb-pair" aria-hidden="true"><span class="w300">Łukasz</span> <span class="w700">Datkowski</span></p>
+        <h3>Scale</h3>
+        <p>Each size comes from a ratio: 1.125 on phones, 1.25 on large screens, and 1.414 on the CV page, the same ratio as an A4 sheet.</p>
+        <ol class="bb-scale" role="list" aria-label="Type scale on this screen">
+          <li style="font-size: var(--s5)">s5</li><li style="font-size: var(--s4)">s4</li><li style="font-size: var(--s3)">s3</li><li style="font-size: var(--s2)">s2</li><li style="font-size: var(--s1)">s1</li><li style="font-size: var(--text-md)">body</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="pattern" aria-labelledby="pattern-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('pattern')}</span><h2 id="pattern-h">{title('pattern')}</h2></div>
+      <div class="bb-flow">
+        <p>Two repeating patterns on the 45° axis: the classic checkerboard and the lines only. The site uses the lines, at low contrast, in the hero and the footer.</p>
+        <ul class="bb-tiles bb-tiles-2" role="list">
+          <li><figure class="bb-tile bb-pat pat-check" aria-hidden="true"></figure><p class="bb-cap">Checkerboard</p></li>
+          <li><figure class="bb-tile bb-pat lattice" aria-hidden="true"></figure><p class="bb-cap">Lines only (lattice)</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="ornament" aria-labelledby="ornament-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('ornament')}</span><h2 id="ornament-h">{title('ornament')}</h2></div>
+      <div class="bb-flow">
+        <p>Small details from the brandbook pages. Each one is decoration: it never carries meaning alone.</p>
+        <ul class="bb-orns" role="list">
+          <li>
+            <figure class="bb-orn"><img src={u('/brand/peel-gold.svg')} alt="" width="165" height="173" loading="lazy" decoding="async"></figure>
+            <h3>Peel</h3>
+            <p>A page corner that turns up. It marks a page in the print brandbook.</p>
+          </li>
+          <li>
+            <figure class="bb-orn"><div class="fold-demo fold"></div></figure>
+            <h3>Folded corner</h3>
+            <p>The flat version of the peel: a solid triangle on the top-right corner of a card. The color swatches above use it.</p>
+          </li>
+          <li>
+            <figure class="bb-orn bb-corner" aria-hidden="true"><span>Logo</span></figure>
+            <h3>Corner label</h3>
+            <p>A section name on a 45° line in the page corner. One for each page. The CV page scales it up to a band.</p>
+          </li>
+          <li>
+            <figure class="bb-orn" aria-hidden="true"><span class="counter"><i></i><i></i><i></i><i></i><i></i></span></figure>
+            <h3>Counter</h3>
+            <p>Five soft squares, filled from the bottom. A brand asset only: this site does not rate skills.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="portrait" aria-labelledby="portrait-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('portrait')}</span><h2 id="portrait-h">{title('portrait')}</h2></div>
+      <div class="bb-flow bb-portrait">
+        <img src={u('/brand/portrait.avif')} alt="Line drawing of my face: swept hair, round glasses, and a beard." width="720" height="720" loading="lazy" decoding="async">
+        <p>A line portrait. The versions are from 2021 and 2024. Use it for avatars and for places where a photo is too much. In the dark theme, the lines change to light.</p>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="web" aria-labelledby="web-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('web')}</span><h2 id="web-h">{title('web')}</h2></div>
+      <div class="bb-flow">
+        <p>Where the brand shows on this site:</p>
+        <ul class="bb-list">
+          <li><strong>Header:</strong> the fat brandmark and my name as a light and bold pair.</li>
+          <li><strong>Flowline:</strong> a 2 px gold line under the header and above the footer.</li>
+          <li><strong>Standfirst:</strong> a thick gold rule at the start of the CV statement.</li>
+          <li><strong>Lattice:</strong> the lines pattern in the CV hero and the footer.</li>
+          <li><strong>Corner band:</strong> the corner label, scaled up, on the CV page.</li>
+          <li><strong>Favicon:</strong> the fat brandmark in gold.</li>
+        </ul>
+        <p>All colors, sizes, and spaces are tokens in one CSS file. Light and dark themes use the same tokens. See the <a href={u('/colophon/')}>colophon</a>.</p>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="rules" aria-labelledby="rules-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('rules')}</span><h2 id="rules-h">{title('rules')}</h2></div>
+      <div class="bb-flow bb-rules">
+        <div>
+          <h3>Do</h3>
+          <ul class="bb-list">
+            <li>Keep gold small and deliberate: marks, rules, the logo.</li>
+            <li>Use gold-text (<code>#9e6600</code>) when gold must be text on snow.</li>
+            <li>Use one secondary color in one view.</li>
+            <li>Use the fat brandmark below 48 px.</li>
+            <li>Keep one unsquare break in each view.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Do not</h3>
+          <ul class="bb-list bb-dont">
+            <li>Set text or thin meaningful lines in gold on snow (1.88 : 1).</li>
+            <li>Fill large areas with gold.</li>
+            <li>Put the lattice or a corner label behind reading text.</li>
+            <li>Put links or meta text on the gray surface.</li>
+            <li>Use gradients, glass effects, or stock photos.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

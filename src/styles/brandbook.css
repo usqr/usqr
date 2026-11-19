@@ -1,0 +1,147 @@
+/* Brandbook page (/sidequests/brandbook/). Loads after site.css on this page only.
+ * Tiles and swatches show fixed brand colors (--usqr-*): they do not change with the theme. */
+
+/* ---------- Brand color helpers ---------- */
+.c-gold { color: var(--usqr-gold); }
+.c-coal { color: var(--usqr-coal); }
+.c-snow { color: var(--usqr-snow); }
+.c-sky  { color: var(--usqr-sky); }
+.c-lava { color: var(--usqr-lava); }
+.c-sun  { color: var(--usqr-sun); }
+.c-ink  { color: var(--usqr-ink); }
+.on-snow { background: var(--usqr-snow); color: var(--usqr-coal); }
+.on-coal { background: var(--usqr-coal); color: var(--usqr-snow); }
+.c-bg-gold { background: var(--usqr-gold); }
+.c-bg-coal { background: var(--usqr-coal); }
+.c-bg-snow { background: var(--usqr-snow); box-shadow: inset 0 0 0 1px var(--border); }
+.c-bg-sky  { background: var(--usqr-sky); }
+.c-bg-lava { background: var(--usqr-lava); }
+.c-bg-sun  { background: var(--usqr-sun); }
+.c-bg-gray { background: var(--usqr-gray); }
+.c-bg-ink  { background: var(--usqr-ink); box-shadow: inset 0 0 0 1px var(--border); }
+.c-bg-gold-text { background: var(--usqr-gold-text); }
+.c-bg-sky-text  { background: var(--usqr-sky-text); }
+.c-bg-lava-text { background: var(--usqr-lava-text); }
+
+/* ---------- Page frame ---------- */
+.bb-title { display: flex; flex-wrap: wrap; align-items: center; gap: 0 0.3em; }
+.bb-title > span { font-family: var(--font-sans); font-weight: 400; letter-spacing: 0; }
+.bb-title-mark { inline-size: 0.95em; color: var(--accent); }
+.un { font-family: var(--font-sans); font-weight: 300; }
+.sq { font-family: var(--font-sans); font-weight: 400; }
+/* Logotype: the same gold-text in the two themes (3.16 : 1 on ink, large text). */
+.bb-title .sq { color: var(--usqr-gold-text); }
+
+.bb-flow { max-width: var(--measure); }
+.bb-flow > * + * { margin-top: var(--space-4); }
+.bb-flow h3 { margin-top: var(--space-8); font-size: var(--s1); }
+.bb-flow h3 + * { margin-top: var(--space-3); }
+.bb-note { font-size: var(--text-sm); color: var(--fg-2); }
+.bb-cap { margin-top: var(--space-2); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--meta); }
+.bb-list { padding-inline-start: 1.2em; list-style: square; }
+.bb-list li + li { margin-top: var(--space-2); }
+.bb-list li::marker { color: var(--meta); }
+
+.bb-facts { display: grid; gap: var(--space-2) var(--space-5); padding-top: var(--space-4); border-top: 2px solid var(--fg); }
+.bb-facts div { display: grid; gap: 0 var(--space-5); }
+@media (min-width: 768px) { .bb-facts div { grid-template-columns: 9rem minmax(0, 1fr); } }
+.bb-facts dt { font-family: var(--font-serif); font-weight: var(--w-serif-bold); }
+.bb-facts dd { margin: 0; color: var(--fg-2); }
+
+/* ---------- Tiles: logo and pattern ---------- */
+.bb-tiles { display: grid; gap: var(--space-4); }
+@media (min-width: 640px) {
+  .bb-tiles-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bb-tiles-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.bb-tile { display: grid; place-items: center; margin: 0; min-block-size: 9rem; padding: var(--space-6) var(--space-4); }
+.bb-tile.on-snow { box-shadow: inset 0 0 0 1px var(--border); }
+
+.logo { display: inline-flex; align-items: center; gap: 0.3em; font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1; }
+.logo .logo-mark { inline-size: 1.15em; }
+.logo-alt { flex-direction: column; gap: 0.25em; font-size: clamp(1.5rem, 3vw, 2rem); }
+.logo-alt .logo-mark { inline-size: 1.5em; }
+
+.bb-pat { aspect-ratio: 2; min-block-size: 0; box-shadow: inset 0 0 0 1px var(--border); }
+/* Checkerboard: squares on the 45° axis, hard stops */
+.pat-check { position: relative; overflow: hidden; background-color: var(--bg); }
+.pat-check::before { content: ""; position: absolute; inset: -50%; transform: rotate(45deg);
+  background-image: conic-gradient(var(--border-soft) 25%, transparent 0 50%, var(--border-soft) 0 75%, transparent 0); background-size: 48px 48px; }
+
+/* ---------- Brandmark ---------- */
+.bb-weights { display: grid; gap: var(--space-6); }
+@media (min-width: 768px) { .bb-weights { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.bb-weights h3 { margin-top: var(--space-3); }
+.bb-weights p { margin-top: var(--space-1); font-size: var(--text-sm); color: var(--fg-2); }
+.bb-weight-sizes { display: flex; align-items: flex-end; gap: var(--space-3); padding-bottom: var(--space-3); border-bottom: var(--rule); color: var(--accent); }
+.s96 { inline-size: 96px; } .s48 { inline-size: 48px; } .s24 { inline-size: 24px; } .s16 { inline-size: 16px; }
+
+.bb-mark-colors { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: var(--space-3); }
+.bb-mark-colors li { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-4) var(--space-2) var(--space-3);
+                     font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; }
+.bb-mark-colors li.on-snow { box-shadow: inset 0 0 0 1px var(--border); }
+.bb-mark-colors .mark { inline-size: 40px; }
+
+/* ---------- Color swatches: folded-corner cards (brandbook p2) ---------- */
+.fold { position: relative; }
+.fold::after { content: ""; position: absolute; inset-block-start: 0; inset-inline-end: 0;
+  border-style: solid; border-width: 0 var(--corner-fold) var(--corner-fold) 0; border-color: transparent var(--fg) transparent transparent; }
+.bb-group h3 { margin-top: var(--space-6); }
+.bb-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: var(--space-4); margin-top: var(--space-4); }
+.bb-swatch { padding: var(--space-2) var(--space-2) var(--space-3); border: var(--rule); background: var(--bg); }
+.bb-swatch .chip { display: flex; align-items: flex-end; aspect-ratio: 1.25; padding: var(--space-2) var(--space-3); }
+/* Swatch name: Lato Light, large text (3 : 1 contrast or more on its color) */
+.bb-swatch .chip span { font-family: var(--font-sans); font-weight: 300; font-size: 1.75rem; line-height: 1; }
+.bb-swatch dl { display: grid; gap: 0; margin-top: var(--space-3); padding-inline: var(--space-1); font-size: var(--text-xs); }
+.bb-swatch dl div { display: flex; gap: var(--space-2); }
+.bb-swatch dt { min-inline-size: 3.2rem; color: var(--meta); letter-spacing: 0.06em; }
+.bb-swatch dd { margin: 0; font-variant-numeric: lining-nums tabular-nums; }
+.bb-swatch code { font-size: inherit; }
+.bb-swatch > p { margin-top: var(--space-2); padding-inline: var(--space-1); font-size: var(--text-xs); color: var(--fg-2); }
+
+/* ---------- Type ---------- */
+.bb-specimens { display: grid; gap: var(--space-4); }
+@media (min-width: 768px) { .bb-specimens { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bb-spec { margin: 0; padding: var(--space-4) var(--space-5) var(--space-5); border-top: 2px solid var(--fg); }
+.spec-aa { font-size: calc(var(--s5) * 1.6); line-height: 1; }
+.spec-lato .spec-aa, .spec-lato .spec-row { font-family: var(--font-sans); }
+.spec-bitter .spec-aa, .spec-bitter .spec-row { font-family: var(--font-serif); font-weight: var(--w-serif-bold); }
+.bb-spec figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); }
+.bb-spec figcaption strong { color: var(--fg); }
+.spec-row { margin-top: var(--space-2); font-size: var(--s1); }
+.spec-bitter .spec-num { font-weight: var(--w-serif); font-variant-numeric: oldstyle-nums; letter-spacing: 0.06em; }
+.w300 { font-weight: 300; } .w700 { font-weight: 700; }
+.bb-pair { font-family: var(--font-sans); font-size: var(--s4); line-height: 1.1; }
+.bb-scale { display: grid; gap: var(--space-2); font-family: var(--font-serif); font-weight: var(--w-serif-bold); line-height: 1.1; }
+.bb-scale li { padding-bottom: var(--space-2); border-bottom: 1px solid var(--border-soft); }
+
+/* ---------- Ornaments ---------- */
+.bb-orns { display: grid; gap: var(--space-6) var(--space-5); }
+@media (min-width: 640px) { .bb-orns { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bb-orns h3 { margin-top: var(--space-3); }
+.bb-orns p { margin-top: var(--space-1); font-size: var(--text-sm); color: var(--fg-2); }
+.bb-orn { display: grid; place-items: center; margin: 0; block-size: 9rem; box-shadow: inset 0 0 0 1px var(--border); background: var(--bg); }
+.bb-orn img { inline-size: 7rem; block-size: auto; }
+.fold-demo { inline-size: 6rem; aspect-ratio: 1.25; border: var(--rule); background: var(--surface-warm); }
+/* Corner label: the brandbook page header, small */
+.bb-corner { position: relative; overflow: hidden; }
+.bb-corner span { position: absolute; inset-block-start: 1.6rem; inset-inline-start: -4.6rem; inline-size: 14rem; padding-block: 0.2rem;
+  transform: rotate(-45deg); border-bottom: 1px solid var(--accent); text-align: center;
+  font-family: var(--font-serif); font-weight: var(--w-serif); font-size: var(--text-sm); letter-spacing: 0.08em; }
+.counter { display: flex; flex-direction: column-reverse; gap: 6px; }
+.counter i { inline-size: 18px; block-size: 18px; border-radius: 5px; background: var(--border-soft); }
+.counter i:nth-child(-n + 3) { background: var(--accent); }
+
+/* ---------- Portrait: line art on white. Multiply in light, inverted screen in dark. ---------- */
+.bb-portrait img { display: block; inline-size: min(100%, 22rem); block-size: auto; mix-blend-mode: multiply; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .bb-portrait img { filter: invert(1); mix-blend-mode: screen; }
+}
+:root[data-theme="dark"] .bb-portrait img { filter: invert(1); mix-blend-mode: screen; }
+
+/* ---------- Rules ---------- */
+.bb-rules { display: grid; gap: var(--space-6); max-width: none; }
+.bb-rules > * + * { margin-top: 0; }
+@media (min-width: 768px) { .bb-rules { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bb-rules h3 { margin-top: 0; padding-top: var(--space-3); border-top: 2px solid var(--fg); }
+.bb-dont li::marker { color: var(--danger); }

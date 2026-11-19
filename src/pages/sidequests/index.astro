@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import { sidequests } from '../../data/sidequests';
+import { countLabel } from '../../lib/format';
+import { u } from '../../lib/url';
+---
+<Base title="Sidequests" current="sidequests" description="Side projects and other experiments: brand, type, and tools.">
+  <div class="wrap">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Sidequests</p><p class="count">{countLabel(sidequests.length, 'project')}</p></div>
+      <div>
+        <h1>Side projects and other experiments</h1>
+        <p class="lede">Work that is not in the CV: my brand, type studies, and small tools.</p>
+      </div>
+    </header>
+    <section class="sec mgrid" aria-label="Projects">
+      <ol class="rows" role="list">
+        {sidequests.map((q) => (
+          <li class="row">
+            <div class="when"><span class="period">{q.year}</span></div>
+            <div class="what">
+              <h2><a class="post-link" href={u(`/sidequests/${q.id}/`)}>{q.title}</a></h2>
+              <p>{q.description}</p>
+              <ul class="tags">{q.kind.map((k) => <li>{k}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </div>
+</Base>

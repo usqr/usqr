@@ -79,14 +79,20 @@ time, .tnum { font-variant-numeric: tabular-nums oldstyle-nums; }
 .site-head { border-bottom: 2px solid var(--accent); }
 .head-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-5); }
 .brand { display: inline-flex; align-items: center; gap: 0.3em; min-height: 44px; color: var(--fg); text-decoration: none; letter-spacing: 0.02em; }
-.brand .usq { margin-inline-end: var(--space-1); }
+/* Fat brandmark: the weight for small sizes (brandbook). Gold is decoration here: the name is the link text. */
+.brand-mark { flex: none; inline-size: 1.125em; block-size: auto; margin-inline-end: var(--space-3); color: var(--accent); }
 .brand .light { font-weight: 300; }
 .brand .bold { font-weight: 700; }
-.nav { display: flex; gap: var(--space-2); }
+.nav { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); }
 .nav a { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; padding-inline: var(--space-1);
          color: var(--fg-2); text-decoration: none; font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
 /* Vertical bar before the label, as the standfirst border. Each link keeps the space, so the labels do not move. */
 .nav a::before { content: ""; flex: none; inline-size: 4px; block-size: 1.25em; background: transparent; }
+/* Phones: four items stay on one line (358px at a 390px viewport). Tap targets keep 44px height. */
+@media (max-width: 479px) {
+  .nav { gap: 0; }
+  .nav a { gap: var(--space-1); font-size: var(--text-xs); letter-spacing: 0.04em; }
+}
 .nav a:hover { color: var(--fg); }
 .nav a:hover::before { background: var(--border); }
 /* Current page: accent-text, not gold, so that the bar has 3:1 non-text contrast in light mode (gold on snow: 1.88). */
