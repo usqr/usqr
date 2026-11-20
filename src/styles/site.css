@@ -80,7 +80,7 @@ time, .tnum { font-variant-numeric: tabular-nums oldstyle-nums; }
 .head-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--space-5); }
 .brand { display: inline-flex; align-items: center; gap: 0.3em; min-height: 44px; color: var(--fg); text-decoration: none; letter-spacing: 0.02em; }
 /* Fat brandmark: the weight for small sizes (brandbook). Gold is decoration here: the name is the link text. */
-.brand-mark { flex: none; inline-size: 1.125em; block-size: auto; margin-inline-end: var(--space-3); color: var(--accent); }
+.brand-mark { flex: none; inline-size: 1.125em; block-size: auto; margin-inline-end: var(--space-2); color: var(--accent); }
 .brand .light { font-weight: 300; }
 .brand .bold { font-weight: 700; }
 .nav { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); }
