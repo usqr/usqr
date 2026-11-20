@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import { u } from '../../lib/url';
+import '../../styles/brandbook.css';
+
+const demo = 'https://usqr.github.io/font-analysis-app/';
+const repo = 'https://github.com/usqr/font-analysis-app';
+const origin = 'https://useratio.com/the-anatomy-of-a-thousand-typefaces/app/';
+const article = 'https://medium.com/@getflourish/the-anatomy-of-a-thousand-typefaces-f7b9088eed1';
+
+const sections = [
+  { id: 'story', title: 'Story' },
+  { id: 'features', title: 'What it does' },
+  { id: 'try', title: 'Try it' },
+] as const;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+
+const features = [
+  ['Library', 'Scan local folders recursively, or browse more than 3500 Google Fonts. Fonts are grouped by family, with live previews.'],
+  ['Filters', 'Range filters for contrast, weight, width, and x-height, plus category, script, style count, and variable fonts.'],
+  ['Analyze', 'Stroke contrast, x-height, proportions, weight, spacing, and a glyph grid for each font. The server calculates the analysis at scan time.'],
+  ['Compare', 'Put several fonts on one canvas, with an option to normalize their sizes.'],
+  ['Variable fonts', 'Sliders for each axis, with a short explanation of more than 20 standard axes.'],
+  ['Classification', 'Automatic categories from names, PANOSE, and the glyph shapes. Manual changes stay after a full rescan.'],
+] as const;
+---
+<Base title="Font analysis app" current="sidequests" description="A library for font files: scan folders, measure each font, and find fonts by x-height, contrast, weight, and width.">
+  <div class="wrap bb">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Sidequest</p><p class="count"><a href={u('/sidequests/')}>All sidequests</a></p></div>
+      <div>
+        <h1>Font analysis app</h1>
+        <p class="lede">A library for font files. It scans folders, measures each font, and lets me find and compare fonts by their x-height, contrast, weight, and width.</p>
+      </div>
+    </header>
+
+    <section class="sec mgrid" id="story" aria-labelledby="story-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(0)}</span><h2 id="story-h">{sections[0].title}</h2></div>
+      <div class="bb-flow">
+        <p>The app <a href={origin}>The Anatomy of a Thousand Typefaces</a> gives more insight into fonts: it lets you find a font by its x-height. Its author, Florian Schulz, described the method in <a href={article}>an article on Medium</a>. I wanted to make my own version for some time.</p>
+        <p>My earlier tries stopped at a wall. Sometimes the scope at the start was too large. Sometimes the AI tools invented results.</p>
+        <p>This time I started small. The first version only showed the analysis of the glyphs as a picture. I had to see that the measurements were real, and not a product of the imagination of the app.</p>
+        <p>Then I debugged it and expanded it, one step at a time. At this time it is a library: it scans folders recursively, analyzes fonts in bulk, and shows the details and comparisons. I spent a bit more time on it than I planned.</p>
+        <dl class="bb-facts">
+          <div><dt>Started</dt><dd>March 2026</dd></div>
+          <div><dt>Stack</dt><dd>React 19, Express 5, opentype.js, Vite, TypeScript</dd></div>
+          <div><dt>Formats</dt><dd>TTF, OTF, WOFF, WOFF2</dd></div>
+          <div><dt>Data</dt><dd>3500+ Google Fonts, 741 of them variable</dd></div>
+          <div><dt>Tests</dt><dd>node:test and Playwright</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="features" aria-labelledby="features-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="features-h">{sections[1].title}</h2></div>
+      <div class="bb-flow">
+        <dl class="bb-facts">
+          {features.map(([name, text]) => <div><dt>{name}</dt><dd>{text}</dd></div>)}
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="try" aria-labelledby="try-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="try-h">{sections[2].title}</h2></div>
+      <div class="bb-flow">
+        <p><a href={demo}>Open the live demo</a>. It is a static build with the Google Fonts set only. Your stars, categories, and tags stay in your browser.</p>
+        <p>To scan your own font folders, run the app on your computer. <a href={repo}>Read the source on GitHub</a>.</p>
+      </div>
+    </section>
+  </div>
+</Base>
