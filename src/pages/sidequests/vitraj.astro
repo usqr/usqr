@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import { u } from '../../lib/url';
+import '../../styles/brandbook.css';
+
+const repo = 'https://github.com/usqr/vitraj';
+const release = 'https://github.com/usqr/vitraj/releases/tag/1.7.4';
+const fman = 'https://github.com/mherrmann/fman';
+const upstreamPr = 'https://github.com/mherrmann/fman/pull/900';
+
+const sections = [
+  { id: 'story', title: 'Story' },
+  { id: 'history', title: 'History' },
+  { id: 'features', title: 'What it does' },
+  { id: 'try', title: 'Try it' },
+] as const;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+
+const history = [
+  ['2016–2021', 'Michael Herrmann writes fman, a paid dual-pane file manager, in about 2300 commits.'],
+  ['Feb 2026', 'fman becomes open source under the MIT license.'],
+  ['Mar 2026', 'I fork it. The app crashes on macOS 26, so the first commits fix the crash and update the dependencies for Python 3.14. I add the file preview.'],
+  ['Apr 2026', 'I add the settings, the theme editor, and one panel system in the core. The fork gets the name vitraj and release 1.7.4 with a DMG installer. My fixes go back to fman in pull request 900.'],
+  ['May 2026', 'I add the gallery view with thumbnails. A tag starts the release build on GitHub Actions.'],
+  ['Sep 2026', 'All bundled tools are native arm64, so the app works without Rosetta.'],
+  ['Nov 2026', 'Folders and previews load outside the main thread. I remove the license check, the error reports, and the old build tool (fbs).'],
+] as const;
+
+const features = [
+  ['Two panes', 'You control the two panes with the keyboard. Tab switches the panes, Cmd+P goes to a folder, Cmd+Shift+P opens the command palette.'],
+  ['File preview', 'Cmd+Y shows the file in the other pane: text, images (also SVG, WEBP, and AVIF), the first page of a PDF, and folder statistics. The preview changes when the cursor moves.'],
+  ['Gallery view', 'Cmd+G shows the folder as thumbnails. Cmd+Plus and Cmd+Minus change the tile size. Each pane keeps its own mode.'],
+  ['Themes', 'A theme editor with 24 colors and a live preview, 9 built-in themes, and import and export of theme files.'],
+  ['Settings', 'Cmd+, opens one panel for the font, the hidden files, the ".." entry, and the external tools.'],
+  ['Plugins', 'A compatibility layer lets plugins for fman work in vitraj.'],
+] as const;
+---
+<Base title="vitraj" current="sidequests" description="vitraj: my fork of the fman dual-pane file manager for macOS, with file preview, gallery view, and themes.">
+  <div class="wrap bb">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Sidequest</p><p class="count"><a href={u('/sidequests/')}>All sidequests</a></p></div>
+      <div>
+        <h1>vitraj</h1>
+        <p class="lede">A dual-pane file manager for macOS. It is my fork of fman, with file preview, a gallery view, and themes.</p>
+      </div>
+    </header>
+
+    <section class="sec mgrid" id="story" aria-labelledby="story-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(0)}</span><h2 id="story-h">{sections[0].title}</h2></div>
+      <div class="bb-flow">
+        <p>I use a dual-pane file manager each day. <a href={fman}>fman</a> was my choice for years, but its development stopped in 2021. In February 2026 its author made the source open and later started new releases.</p>
+        <p>On macOS 26 the app did not start at all. I forked it to fix the crash. Then I added the features that I missed: a file preview, a gallery for images, and a theme editor.</p>
+        <p>The code is old and large, so I worked in small steps, each with tests and a review. The fixes for the crash went back to fman in <a href={upstreamPr}>a pull request</a> that the author merged.</p>
+        <dl class="bb-facts">
+          <div><dt>Started</dt><dd>March 2026</dd></div>
+          <div><dt>Stack</dt><dd>Python 3.14, PyQt5, PyObjC, PyInstaller</dd></div>
+          <div><dt>Platform</dt><dd>macOS (primary), Windows and Linux in the code</dd></div>
+          <div><dt>Commits</dt><dd>About 200 on top of fman</dd></div>
+          <div><dt>Size</dt><dd>The app bundle went from 110 MB to 77 MB.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="history" aria-labelledby="history-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="history-h">{sections[1].title}</h2></div>
+      <div class="bb-flow">
+        <dl class="bb-facts">
+          {history.map(([when, text]) => <div><dt>{when}</dt><dd>{text}</dd></div>)}
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="features" aria-labelledby="features-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="features-h">{sections[2].title}</h2></div>
+      <div class="bb-flow">
+        <dl class="bb-facts">
+          {features.map(([name, text]) => <div><dt>{name}</dt><dd>{text}</dd></div>)}
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="try" aria-labelledby="try-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(3)}</span><h2 id="try-h">{sections[3].title}</h2></div>
+      <div class="bb-flow">
+        <p><a href={release}>Download release 1.7.4</a> as a DMG for macOS. It is the April build, so it does not have the gallery view and the later changes. The app has an ad-hoc signature, so macOS asks you to confirm the first start.</p>
+        <p>To run it from the source or to build it for Windows or Linux, <a href={repo}>read the source on GitHub</a>.</p>
+      </div>
+    </section>
+  </div>
+</Base>

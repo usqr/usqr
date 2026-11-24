@@ -24,4 +24,11 @@ export const sidequests: Sidequest[] = [
     description: 'A library for font files. It scans folders, measures each font, and finds fonts by x-height, contrast, weight, and width.',
     kind: ['Type', 'Tool', 'Web app'],
   },
+  {
+    id: 'vitraj',
+    title: 'vitraj',
+    year: 2026,
+    description: 'A dual-pane file manager for macOS. It is my fork of fman, with file preview, a gallery view, and themes.',
+    kind: ['Tool', 'Desktop app', 'Open source'],
+  },
 ];

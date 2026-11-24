@@ -90,7 +90,7 @@ test('the main nav links to Sidequests on every page', () => {
     const nav = html.match(/<nav aria-label="Main">[\s\S]*?<\/nav>/)?.[0] ?? '';
     assert.ok(nav.includes(`href="${base}/sidequests/"`), name);
   }
-  for (const p of ['sidequests/index.html', 'sidequests/brandbook/index.html', 'sidequests/font-analysis/index.html']) assert.ok(existsSync(join(dist, p)), `missing ${p}`);
+  for (const p of ['sidequests/index.html', 'sidequests/brandbook/index.html', 'sidequests/font-analysis/index.html', 'sidequests/vitraj/index.html']) assert.ok(existsSync(join(dist, p)), `missing ${p}`);
 });
 
 test('the header logo and the favicon are the fat brandmark', () => {
