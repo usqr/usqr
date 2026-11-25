@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import Shot from '../../components/Shot.astro';
+import Flow from '../../components/Flow.astro';
+import Stats from '../../components/Stats.astro';
+import { u } from '../../lib/url';
+import '../../styles/brandbook.css';
+import '../../styles/sidequest.css';
+
+const repo = 'https://github.com/usqr/kindle-writer';
+
+const sections = [
+  { id: 'story', title: 'Story' },
+  { id: 'how', title: 'How it works' },
+  { id: 'look', title: 'How it looks' },
+  { id: 'history', title: 'One afternoon' },
+  { id: 'try', title: 'Try it' },
+] as const;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+
+const stats = [
+  ['From first test to last test', '3 h 40 min'],
+  ['Lines of Python (server)', '724'],
+  ['Lines of Kotlin (Android app)', '1,004'],
+  ['Commits', '1'],
+] as const;
+
+const steps = [
+  ['Bluetooth keyboard', 'Paired with the phone.'],
+  ['Android phone', 'The /keyboard page or the app catches each key.'],
+  ['Writer server', 'Keeps the text and the cursor, port 3333.'],
+  ['Kindle browser', 'The /writer page asks for the text every 2 s.'],
+] as const;
+
+// From the times of the screenshots and webcam pictures that the session saved.
+const afternoon = [
+  ['14:14', 'The agent looks at the Kindle through the webcam of the Mac for the first time.'],
+  ['14:47', 'The first /writer page: black text on white, a serif font, and a status line, made for e-ink.'],
+  ['15:15', 'The server runs on the phone in Termux. The agent controls the phone over USB with adb.'],
+  ['15:38', 'Chrome on the phone opens /keyboard. A tap starts the keyboard input.'],
+  ['15:46', 'The first typed text goes from the keyboard to the server.'],
+  ['16:39', 'A native Android app (Kotlin, NanoHTTPD) replaces Termux. It runs as a foreground service.'],
+  ['16:53', 'The app shows the URL for the Kindle. The text shows on the Kindle.'],
+  ['17:54', 'The last webcam check: a long line of test text on the Kindle screen.'],
+  ['26 Mar', 'One commit to GitHub with the server, the app, and the pictures of the session.'],
+] as const;
+---
+<Base title="Kindle writer" current="sidequests" description="Kindle writer: a Kindle as a distraction-free typewriter, with a Bluetooth keyboard, an Android phone as a relay, and a small Python server.">
+  <div class="wrap bb">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Sidequest</p><p class="count"><a href={u('/sidequests/')}>All sidequests</a></p></div>
+      <div>
+        <h1>Kindle writer</h1>
+        <p class="lede">A Kindle as a typewriter without distractions. I type on a Bluetooth keyboard, and the text shows on the e-ink screen.</p>
+      </div>
+    </header>
+
+    <section class="sec mgrid" id="story" aria-labelledby="story-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(0)}</span><h2 id="story-h">{sections[0].title}</h2></div>
+      <div class="bb-flow">
+        <p>I wanted to write on a screen that does not show notifications. An e-ink Kindle is quiet and easy on the eyes, but it cannot connect to a keyboard. Its browser can show a web page.</p>
+        <p>So a small server keeps the text, and the Kindle shows it. A phone connects to the keyboard and sends each key to the server.</p>
+        <p>I made it in one afternoon with Claude Code. The agent could not see the Kindle, so it used the webcam of the Mac as its eyes. It controlled the phone over USB. The pictures on this page come from that session.</p>
+        <dl class="bb-facts">
+          <div><dt>Made</dt><dd>23 March 2026</dd></div>
+          <div><dt>Stack</dt><dd>Python (http.server), Kotlin with NanoHTTPD, plain HTML for the Kindle</dd></div>
+          <div><dt>Saves</dt><dd>A local draft each 30 seconds, and a GitHub Gist with Ctrl+S</dd></div>
+          <div><dt>Keys</dt><dd>Arrows, Home, End, Ctrl+A, Ctrl+E, Ctrl+K, Ctrl+S, Ctrl+Arrow for words</dd></div>
+        </dl>
+      </div>
+      <Stats items={stats} />
+    </section>
+
+    <section class="sec mgrid" id="how" aria-labelledby="how-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="how-h">{sections[1].title}</h2></div>
+      <Flow label="From the keyboard to the Kindle" steps={steps}
+        caption="All parts are on the same Wi-Fi network. The Kindle browser is old and slow, so the /writer page uses only simple HTML and a 2-second poll." />
+    </section>
+
+    <section class="sec mgrid" id="look" aria-labelledby="look-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="look-h">{sections[2].title}</h2></div>
+      <Shot src="/sidequests/kindle-writer/kindle-webcam.avif" width={884} height={489}
+        alt="A webcam picture of a Kindle that shows lines of typed test text in a serif font, with a status line at the bottom."
+        title="The Kindle, seen by the webcam" caption="This is how the agent checked its work. The text is a keyboard test. The status line shows the line, column, words, and characters." />
+      <div class="shot-pair">
+        <Shot narrow margin={false} src="/sidequests/kindle-writer/keyboard-page.avif" width={782} height={1000}
+          alt="The Kindle Writer keyboard page in Chrome on Android: a button to start the keyboard input, a title field, Save, Load, and New buttons, and an empty text area."
+          title="Keyboard page in Chrome" caption="The first version: a web page on the phone catches the keys. A tap on the blue button starts it." />
+        <Shot narrow margin={false} src="/sidequests/kindle-writer/android-app.avif" width={900} height={1000}
+          alt="The Kindle Writer Android app: a Stop button, a New button, the server status, the URL for the Kindle, and the typed text."
+          title="Android app" caption="The second version: an app runs the server on the phone and shows the address to open on the Kindle." />
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="history" aria-labelledby="history-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(3)}</span><h2 id="history-h">{sections[3].title}</h2></div>
+      <div class="bb-flow">
+        <p>The times come from the screenshots and webcam pictures of 23 March 2026.</p>
+        <dl class="bb-facts">
+          {afternoon.map(([when, text]) => <div><dt>{when}</dt><dd>{text}</dd></div>)}
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="try" aria-labelledby="try-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(4)}</span><h2 id="try-h">{sections[4].title}</h2></div>
+      <div class="bb-flow">
+        <p>Run <code>python3 kindle_writer.py</code> on a computer or in Termux on a phone. Open <code>/keyboard</code> on the device with the keyboard and <code>/writer</code> on the Kindle.</p>
+        <p>To build the Android app or to see the API, <a href={repo}>read the source on GitHub</a>.</p>
+      </div>
+    </section>
+  </div>
+</Base>
