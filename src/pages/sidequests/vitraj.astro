@@ -1,20 +1,43 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Shot from '../../components/Shot.astro';
+import Chart from '../../components/Chart.astro';
+import Stats from '../../components/Stats.astro';
 import { u } from '../../lib/url';
 import '../../styles/brandbook.css';
+import '../../styles/sidequest.css';
 
 const repo = 'https://github.com/usqr/vitraj';
-const release = 'https://github.com/usqr/vitraj/releases/tag/1.7.4';
+const release = 'https://github.com/usqr/vitraj/releases/tag/v2.0.0';
+const changelog = 'https://github.com/usqr/vitraj/blob/main/CHANGELOG.md';
 const fman = 'https://github.com/mherrmann/fman';
 const upstreamPr = 'https://github.com/mherrmann/fman/pull/900';
 
 const sections = [
   { id: 'story', title: 'Story' },
+  { id: 'look', title: 'How it looks' },
+  { id: 'v2', title: 'Release 2.0.0' },
   { id: 'history', title: 'History' },
   { id: 'features', title: 'What it does' },
   { id: 'try', title: 'Try it' },
 ] as const;
 const num = (i: number) => String(i + 1).padStart(2, '0');
+
+const stats = [
+  ['Commits on top of fman', '169'],
+  ['Merged pull requests', '48'],
+  ['Built-in themes', '26'],
+  ['App bundle, was 110 MB', '77 MB'],
+] as const;
+
+const v2 = [
+  ['Qt 6', 'The app moves from PyQt5 (Qt 5) to PySide6 (Qt 6). Old plugins that import PyQt5 continue to load.'],
+  ['PDF pages and zoom', 'The preview shows all pages of a PDF. You can zoom images and pages, and the text stays sharp.'],
+  ['Fast folders', 'Folders load in a background thread, so a slow drive does not stop the window.'],
+  ['More themes', 'Palette themes and CLI themes, with alternate row colors.'],
+  ['No license check', 'fman is open source, so the license check, the splash screen, and the error reports are removed.'],
+  ['New build', 'PyInstaller builds the app directly. The old build tool (fbs) is removed.'],
+] as const;
 
 const history = [
   ['2016–2021', 'Michael Herrmann writes fman, a paid dual-pane file manager, in about 2300 commits.'],
@@ -23,14 +46,26 @@ const history = [
   ['Apr 2026', 'I add the settings, the theme editor, and one panel system in the core. The fork gets the name vitraj and release 1.7.4 with a DMG installer. My fixes go back to fman in pull request 900.'],
   ['May 2026', 'I add the gallery view with thumbnails. A tag starts the release build on GitHub Actions.'],
   ['Sep 2026', 'All bundled tools are native arm64, so the app works without Rosetta.'],
-  ['Nov 2026', 'Folders and previews load outside the main thread. I remove the license check, the error reports, and the old build tool (fbs).'],
+  ['Nov 2026', 'Folders and previews load outside the main thread. I remove the license check and fbs, move to Qt 6, and add PDF pages and zoom. On 25 November I release 2.0.0.'],
 ] as const;
+
+const commits = [
+  { label: 'Mar', value: 30 },
+  { label: 'Apr', value: 35 },
+  { label: 'May', value: 35 },
+  { label: 'Jun', value: 4 },
+  { label: 'Jul', value: 0 },
+  { label: 'Aug', value: 1 },
+  { label: 'Sep', value: 4 },
+  { label: 'Oct', value: 0 },
+  { label: 'Nov', value: 60 },
+];
 
 const features = [
   ['Two panes', 'You control the two panes with the keyboard. Tab switches the panes, Cmd+P goes to a folder, Cmd+Shift+P opens the command palette.'],
-  ['File preview', 'Cmd+Y shows the file in the other pane: text, images (also SVG, WEBP, and AVIF), the first page of a PDF, and folder statistics. The preview changes when the cursor moves.'],
-  ['Gallery view', 'Cmd+G shows the folder as thumbnails. Cmd+Plus and Cmd+Minus change the tile size. Each pane keeps its own mode.'],
-  ['Themes', 'A theme editor with 24 colors and a live preview, 9 built-in themes, and import and export of theme files.'],
+  ['File preview', 'F3 or Cmd+Y shows the file in the other pane: text, images (also SVG, WEBP, and AVIF), all pages of a PDF, and folder statistics. The preview changes when the cursor moves.'],
+  ['Gallery view', 'Cmd+G shows the folder as thumbnails with the type, the size in pixels, and the file size. Each pane keeps its own mode.'],
+  ['Themes', 'A theme editor with 24 colors and a live preview, 26 built-in themes, and import and export of theme files.'],
   ['Settings', 'Cmd+, opens one panel for the font, the hidden files, the ".." entry, and the external tools.'],
   ['Plugins', 'A compatibility layer lets plugins for fman work in vitraj.'],
 ] as const;
@@ -53,25 +88,51 @@ const features = [
         <p>The code is old and large, so I worked in small steps, each with tests and a review. The fixes for the crash went back to fman in <a href={upstreamPr}>a pull request</a> that the author merged.</p>
         <dl class="bb-facts">
           <div><dt>Started</dt><dd>March 2026</dd></div>
-          <div><dt>Stack</dt><dd>Python 3.14, PyQt5, PyObjC, PyInstaller</dd></div>
+          <div><dt>Stack</dt><dd>Python 3.14, PySide6 (Qt 6), PyObjC, PyMuPDF, PyInstaller</dd></div>
           <div><dt>Platform</dt><dd>macOS (primary), Windows and Linux in the code</dd></div>
-          <div><dt>Commits</dt><dd>About 200 on top of fman</dd></div>
-          <div><dt>Size</dt><dd>The app bundle went from 110 MB to 77 MB.</dd></div>
+          <div><dt>Tests</dt><dd>Unit tests and a visual test harness that starts the app and takes screenshots</dd></div>
+        </dl>
+      </div>
+      <Stats items={stats} />
+    </section>
+
+    <section class="sec mgrid" id="look" aria-labelledby="look-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="look-h">{sections[1].title}</h2></div>
+      <p class="bb-note">The visual test harness of the app took these screenshots, with the Nord theme and a folder of files from this site.</p>
+      <Shot src="/sidequests/vitraj/preview-pdf.avif" width={1440} height={864}
+        alt="vitraj with a file list in the left pane and the first page of a CV PDF in the right pane, with page and zoom controls."
+        title="File preview" caption="The cursor is on cv.pdf, so the other pane shows page 1 of 2. The bar above the page has the page arrows, the file size, and the zoom." />
+      <Shot src="/sidequests/vitraj/gallery.avif" width={1440} height={864}
+        alt="vitraj with a file list on the left and a gallery of image thumbnails on the right, each with its type, size in pixels, and file size."
+        title="Gallery view" caption="The right pane shows the brand folder as tiles. Each tile has the file type, the size in pixels, and the file size." />
+      <Shot src="/sidequests/vitraj/preview-svg.avif" width={1440} height={864}
+        alt="vitraj with a large preview of an SVG ornament in the left pane and the gallery in the right pane."
+        title="Preview from the gallery" caption="The preview also works from the gallery. Here it shows an SVG file at 722% zoom." />
+    </section>
+
+    <section class="sec mgrid" id="v2" aria-labelledby="v2-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="v2-h">{sections[2].title}</h2></div>
+      <div class="bb-flow">
+        <p><a href={release}>Release 2.0.0</a> came out on 25 November 2026, with a DMG for macOS. The major version changes because plugins now use Qt 6. <a href={changelog}>Read the changelog</a>.</p>
+        <dl class="bb-facts">
+          {v2.map(([name, text]) => <div><dt>{name}</dt><dd>{text}</dd></div>)}
         </dl>
       </div>
     </section>
 
     <section class="sec mgrid" id="history" aria-labelledby="history-h">
-      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="history-h">{sections[1].title}</h2></div>
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(3)}</span><h2 id="history-h">{sections[3].title}</h2></div>
       <div class="bb-flow">
         <dl class="bb-facts">
           {history.map(([when, text]) => <div><dt>{when}</dt><dd>{text}</dd></div>)}
         </dl>
       </div>
+      <Chart caption="My commits for each month, 2026" unit="commits" data={commits} mark={[0, 1, 2, 8]}
+        note="169 commits from March to November, merge commits not included. The work stopped in the summer and came back in November for 2.0.0." />
     </section>
 
     <section class="sec mgrid" id="features" aria-labelledby="features-h">
-      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="features-h">{sections[2].title}</h2></div>
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(4)}</span><h2 id="features-h">{sections[4].title}</h2></div>
       <div class="bb-flow">
         <dl class="bb-facts">
           {features.map(([name, text]) => <div><dt>{name}</dt><dd>{text}</dd></div>)}
@@ -80,9 +141,9 @@ const features = [
     </section>
 
     <section class="sec mgrid" id="try" aria-labelledby="try-h">
-      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(3)}</span><h2 id="try-h">{sections[3].title}</h2></div>
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(5)}</span><h2 id="try-h">{sections[5].title}</h2></div>
       <div class="bb-flow">
-        <p><a href={release}>Download release 1.7.4</a> as a DMG for macOS. It is the April build, so it does not have the gallery view and the later changes. The app has an ad-hoc signature, so macOS asks you to confirm the first start.</p>
+        <p><a href={release}>Download release 2.0.0</a> as a DMG for macOS. It has all the features on this page. The app has an ad-hoc signature, so macOS asks you to confirm the first start.</p>
         <p>To run it from the source or to build it for Windows or Linux, <a href={repo}>read the source on GitHub</a>.</p>
       </div>
     </section>

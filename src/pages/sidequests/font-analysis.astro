@@ -1,7 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Shot from '../../components/Shot.astro';
+import Chart from '../../components/Chart.astro';
+import Stats from '../../components/Stats.astro';
 import { u } from '../../lib/url';
 import '../../styles/brandbook.css';
+import '../../styles/sidequest.css';
 
 const demo = 'https://usqr.github.io/font-analysis-app/';
 const repo = 'https://github.com/usqr/font-analysis-app';
@@ -10,16 +14,49 @@ const article = 'https://medium.com/@getflourish/the-anatomy-of-a-thousand-typef
 
 const sections = [
   { id: 'story', title: 'Story' },
+  { id: 'look', title: 'How it looks' },
+  { id: 'history', title: 'History' },
+  { id: 'tags', title: 'Tags from the outlines' },
   { id: 'features', title: 'What it does' },
   { id: 'try', title: 'Try it' },
 ] as const;
 const num = (i: number) => String(i + 1).padStart(2, '0');
 
+const stats = [
+  ['Fonts in the demo', '3,569'],
+  ['Font families', '1,994'],
+  ['Commits', '48'],
+  ['Serif or sans correct', '97.6%'],
+] as const;
+
+const history = [
+  ['16 Mar 2026', 'First version: the scan, the glyph analysis as a picture, and the compare panel. On the same day: classification from the names, stars, saved folders, and manual categories that stay after a rescan.'],
+  ['17 Mar 2026', 'The server calculates the analysis at scan time and keeps it in a database. Google Fonts come in with the analysis already done. Script detection, library filters, and variable fonts with axis sliders.'],
+  ['18 Mar 2026', 'New gallery tiles with controls for variable fonts. Then a pause of eight months.'],
+  ['18–19 Nov 2026', 'A static build of the Google Fonts set goes to GitHub Pages, so anyone can try it. Node 26 LTS. Tags from the glyph outlines, a slab filter, and tooltips.'],
+  ['20 Nov 2026', 'I made mockups for the library, analyze, and compare views in Open Design and applied them. The end-to-end tests changed with the views. A review found small defects, and I fixed them.'],
+] as const;
+
+const days = [
+  { label: '16 Mar', value: 9 },
+  { label: '17 Mar', value: 7 },
+  { label: '18 Mar', value: 1 },
+  { label: '…', value: 0 },
+  { label: '18 Nov', value: 1 },
+  { label: '19 Nov', value: 14 },
+  { label: '20 Nov', value: 16 },
+];
+
+const accuracy = [
+  { label: 'File metadata', value: 76.4 },
+  { label: 'Glyph outlines', value: 97.6 },
+];
+
 const features = [
-  ['Library', 'Scan local folders recursively, or browse more than 3500 Google Fonts. Fonts are grouped by family, with live previews.'],
-  ['Filters', 'Range filters for contrast, weight, width, and x-height, plus category, script, style count, and variable fonts.'],
-  ['Analyze', 'Stroke contrast, x-height, proportions, weight, spacing, and a glyph grid for each font. The server calculates the analysis at scan time.'],
-  ['Compare', 'Put several fonts on one canvas, with an option to normalize their sizes.'],
+  ['Library', 'Scan local folders recursively, or browse the Google Fonts set. Fonts are grouped by family, with live previews.'],
+  ['Filters', 'Range filters with histograms for contrast, weight, width, and x-height, plus category, script, style count, and variable fonts.'],
+  ['Analyze', 'Stroke contrast, x-height, proportions, weight, spacing, and a glyph grid for each font. Export the results as JSON or as an image.'],
+  ['Compare', 'Put several fonts on one canvas with their metrics lines, with an option to normalize the x-height.'],
   ['Variable fonts', 'Sliders for each axis, with a short explanation of more than 20 standard axes.'],
   ['Classification', 'Automatic categories from names, PANOSE, and the glyph shapes. Manual changes stay after a full rescan.'],
 ] as const;
@@ -45,14 +82,50 @@ const features = [
           <div><dt>Started</dt><dd>March 2026</dd></div>
           <div><dt>Stack</dt><dd>React 19, Express 5, opentype.js, Vite, TypeScript</dd></div>
           <div><dt>Formats</dt><dd>TTF, OTF, WOFF, WOFF2</dd></div>
-          <div><dt>Data</dt><dd>3500+ Google Fonts, 741 of them variable</dd></div>
-          <div><dt>Tests</dt><dd>node:test and Playwright</dd></div>
+          <div><dt>Tests</dt><dd>node:test and Playwright, also for the static build</dd></div>
         </dl>
       </div>
+      <Stats items={stats} />
+    </section>
+
+    <section class="sec mgrid" id="look" aria-labelledby="look-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="look-h">{sections[1].title}</h2></div>
+      <p class="bb-note">Screenshots of the live demo, November 2026.</p>
+      <Shot src="/sidequests/font-analysis/library.avif" width={1440} height={900}
+        alt="The library view with the Slab category filter on: a grid of 70 slab serif families, and filters with histograms for contrast and weight."
+        title="Library" caption="The Slab filter shows 132 fonts in 70 families. The asterisk marks a tag from the glyph outlines. The histograms show how the fonts spread over contrast and weight." />
+      <Shot src="/sidequests/font-analysis/analyze.avif" width={1440} height={900}
+        alt="The analyze view for Playfair Display: the letters o and O with the thickest and thinnest strokes marked, and a results table."
+        title="Analyze" caption="Playfair Display has a contrast of 4.87 : 1 in the “o”. The app finds the thickest stroke (blue) and the thinnest stroke (red) on the outline." />
+      <Shot src="/sidequests/font-analysis/compare.avif" width={1440} height={900}
+        alt="The compare view with Lato, Roboto Slab, and Bitter on top of each other, with metrics lines and a table of metrics."
+        title="Compare" caption="Lato, Roboto Slab, and Bitter on one baseline: the type of this site and its earlier serif. The table gives the metrics in font units." />
+    </section>
+
+    <section class="sec mgrid" id="history" aria-labelledby="history-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="history-h">{sections[2].title}</h2></div>
+      <div class="bb-flow">
+        <p>The app grew in two short bursts of work, eight months apart.</p>
+        <dl class="bb-facts">
+          {history.map(([when, text]) => <div><dt>{when}</dt><dd>{text}</dd></div>)}
+        </dl>
+      </div>
+      <Chart caption="Commits for each day of work" unit="commits" data={days} mark={[0, 6]}
+        note="17 commits in March and 31 commits in November, in 7 pull requests. Nothing between them." />
+    </section>
+
+    <section class="sec mgrid" id="tags" aria-labelledby="tags-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(3)}</span><h2 id="tags-h">{sections[3].title}</h2></div>
+      <div class="bb-flow">
+        <p>Font files often have a wrong category, or none. So the app reads the outline of the letter “H”. If it finds serifs, the font is a serif. If the serifs are thick and flat, the font is also a slab.</p>
+        <p>Script and decorative faces do not have a regular “H”. For them, the app keeps the category from the file. This rule cut the wrong labels on these faces from 162 to 53.</p>
+      </div>
+      <Chart kind="bars" caption="Serif or sans: correct labels on 1,029 Google font families" unit="%" suffix="%" data={accuracy} mark={[0, 1]}
+        note="The reference is the category in the Google Fonts metadata. For slab detection, precision is 68% and recall is 65%, but the reference list of slabs is not complete." />
     </section>
 
     <section class="sec mgrid" id="features" aria-labelledby="features-h">
-      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="features-h">{sections[1].title}</h2></div>
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(4)}</span><h2 id="features-h">{sections[4].title}</h2></div>
       <div class="bb-flow">
         <dl class="bb-facts">
           {features.map(([name, text]) => <div><dt>{name}</dt><dd>{text}</dd></div>)}
@@ -61,7 +134,7 @@ const features = [
     </section>
 
     <section class="sec mgrid" id="try" aria-labelledby="try-h">
-      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="try-h">{sections[2].title}</h2></div>
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(5)}</span><h2 id="try-h">{sections[5].title}</h2></div>
       <div class="bb-flow">
         <p><a href={demo}>Open the live demo</a>. It is a static build with the Google Fonts set only. Your stars, categories, and tags stay in your browser.</p>
         <p>To scan your own font folders, run the app on your computer. <a href={repo}>Read the source on GitHub</a>.</p>
