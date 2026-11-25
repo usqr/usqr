@@ -1,0 +1,135 @@
+---
+import Base from '../../layouts/Base.astro';
+import Chart from '../../components/Chart.astro';
+import Flow from '../../components/Flow.astro';
+import Stats from '../../components/Stats.astro';
+import { u } from '../../lib/url';
+import '../../styles/brandbook.css';
+import '../../styles/sidequest.css';
+
+const repo = 'https://github.com/usqr/CLIprecog';
+const release = 'https://github.com/usqr/CLIprecog/releases/tag/v0.1.0';
+const upstream = 'https://github.com/aws/amazon-q-developer-cli-autocomplete';
+const fig = 'https://github.com/withfig/autocomplete';
+
+const sections = [
+  { id: 'story', title: 'Story' },
+  { id: 'look', title: 'How it looks' },
+  { id: 'how', title: 'How it works' },
+  { id: 'history', title: 'History' },
+  { id: 'try', title: 'Try it' },
+] as const;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+
+const stats = [
+  ['Upstream commits', '879'],
+  ['My commits', '20'],
+  ['Lines removed', '211k'],
+  ['Completion specs', '700+'],
+] as const;
+
+const steps = [
+  ['Your shell', 'zsh, bash, or fish, with a small hook.'],
+  ['figterm', 'A pseudo-terminal around the shell. It reads the command line at each key.'],
+  ['fig_desktop', 'A native app (Tao + Wry) draws a window at the cursor.'],
+  ['Autocomplete', 'A React view reads the specs and shows the suggestions.'],
+] as const;
+
+const quarters = [
+  { label: 'Q4 2024', value: 111 },
+  { label: 'Q1 2025', value: 239 },
+  { label: 'Q2 2025', value: 426 },
+  { label: 'Q3 2025', value: 72 },
+  { label: 'Q4 2025', value: 31 },
+  { label: 'Q1 2026', value: 0 },
+  { label: 'Q2 2026', value: 27 },
+];
+
+const removed = [
+  { label: 'Login and AWS clients', value: 204272 },
+  { label: 'Updater', value: 4029 },
+  { label: 'Old test snapshots', value: 2832 },
+  { label: 'Chat, Inline, Translate', value: 224 },
+];
+
+const history = [
+  ['Before 2024', 'Fig makes IDE-style autocomplete for the terminal. Amazon buys Fig in 2023, and the code becomes part of Amazon Q Developer CLI.'],
+  ['Oct 2024', 'AWS releases the source under MIT or Apache 2.0.'],
+  ['2025', 'Most upstream work goes into the AI chat and agent features. The autocomplete stays, but it needs an AWS login.'],
+  ['6–7 May 2026', 'I fork it, rename it to Precog, and release v0.1.0. The goal: only the local dropdown, without AWS.'],
+  ['19 May 2026', 'I remove the updater and then the login. The login removal deletes about 204,000 lines, most of them generated AWS clients.'],
+  ['29 May – 3 Jun 2026', 'The popup icons show again. A patch for Wry fixes the webview on macOS. All CI jobs are green on Rust 1.88. The Chat, Inline, and Translate tabs go away.'],
+  ['23 Jun 2026', 'The shell setup stops loading a plugin that no longer exists.'],
+] as const;
+---
+<Base title="Precog" current="sidequests" description="Precog: IDE-style autocomplete for zsh, bash, and fish. My fork of the Amazon Q autocomplete, without AWS.">
+  <div class="wrap bb">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Sidequest</p><p class="count"><a href={u('/sidequests/')}>All sidequests</a></p></div>
+      <div>
+        <h1>Precog</h1>
+        <p class="lede">Autocomplete for the terminal, as in an IDE. A dropdown shows the subcommands, options, and arguments while you type.</p>
+      </div>
+    </header>
+
+    <section class="sec mgrid" id="story" aria-labelledby="story-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(0)}</span><h2 id="story-h">{sections[0].title}</h2></div>
+      <div class="bb-flow">
+        <p>Fig made a good autocomplete for the terminal. After Amazon bought Fig, the dropdown became part of <a href={upstream}>Amazon Q Developer CLI</a>, and it needed an AWS login. I only wanted the dropdown.</p>
+        <p>The source is open, so I forked it and named the fork Precog. Then I removed all parts that talk to AWS: the login, the updater, the telemetry clients, and the AI tabs.</p>
+        <p>The repository is large: Rust crates, TypeScript packages, and a vendored webview. Most of my work was to delete code with care and keep the build and the tests green.</p>
+        <dl class="bb-facts">
+          <div><dt>Forked</dt><dd>May 2026, from the Amazon Q autocomplete (originally <a href={fig}>withfig/autocomplete</a>)</dd></div>
+          <div><dt>Stack</dt><dd>Rust 1.88, Tao + Wry, React, TypeScript, protobuf</dd></div>
+          <div><dt>Shells</dt><dd>zsh, bash, fish on macOS and Linux</dd></div>
+          <div><dt>License</dt><dd>MIT or Apache 2.0, as upstream. Not affiliated with AWS.</dd></div>
+        </dl>
+      </div>
+      <Stats items={stats} />
+    </section>
+
+    <section class="sec mgrid" id="look" aria-labelledby="look-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="look-h">{sections[1].title}</h2></div>
+      <figure class="term">
+        <div class="term-win" aria-hidden="true">
+          <p><span class="term-prompt">~/usqr $</span> git ch<span class="term-caret"></span></p>
+          <div class="term-pop">
+            <ul role="list">
+              <li aria-current="true"><span class="ico">›</span><b>checkout</b><i>Switch branches or restore working tree files</i></li>
+              <li><span class="ico">›</span><b>cherry-pick</b><i>Apply the changes introduced by some existing commits</i></li>
+            </ul>
+            <p class="desc">Switch branches or restore working tree files</p>
+          </div>
+        </div>
+        <figcaption><strong>The dropdown, after “git ch”.</strong> This is a drawing in HTML, not a screenshot. The two suggestions and their descriptions come from the git spec in the repository. Tab or Enter puts the selected word on the command line.</figcaption>
+      </figure>
+    </section>
+
+    <section class="sec mgrid" id="how" aria-labelledby="how-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="how-h">{sections[2].title}</h2></div>
+      <Flow label="From a key press to the dropdown" steps={steps}
+        caption="The parts send messages to each other with protobuf. The specs are files that describe each command: its subcommands, options, and arguments." />
+    </section>
+
+    <section class="sec mgrid" id="history" aria-labelledby="history-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(3)}</span><h2 id="history-h">{sections[3].title}</h2></div>
+      <div class="bb-flow">
+        <dl class="bb-facts">
+          {history.map(([when, text]) => <div><dt>{when}</dt><dd>{text}</dd></div>)}
+        </dl>
+      </div>
+      <Chart caption="Commits in the repository for each quarter" unit="commits" data={quarters} mark={[2, 6]}
+        note="The commits until 2025 are upstream work by AWS. The 27 commits in Q2 2026 are mine (20) and their merges." />
+      <Chart kind="bars" caption="Lines that I removed, by part" unit="lines" data={removed} mark={[0, 1, 2, 3]}
+        note="The login removal is large because it deleted the generated AWS API clients." />
+    </section>
+
+    <section class="sec mgrid" id="try" aria-labelledby="try-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(4)}</span><h2 id="try-h">{sections[4].title}</h2></div>
+      <div class="bb-flow">
+        <p>There are no binaries yet, so build it from the source with Rust, Node, and pnpm. Then run <code>precog setup</code> and open a new terminal. <a href={release}>Release v0.1.0</a> marks the first version of the fork.</p>
+        <p>For the build steps, <a href={repo}>read the source on GitHub</a>.</p>
+      </div>
+    </section>
+  </div>
+</Base>

@@ -28,7 +28,21 @@ export const sidequests: Sidequest[] = [
     id: 'vitraj',
     title: 'vitraj',
     year: 2026,
-    description: 'A dual-pane file manager for macOS. It is my fork of fman, with file preview, a gallery view, and themes.',
+    description: 'A dual-pane file manager for macOS. It is my fork of fman, with file preview, a gallery view, and themes. Release 2.0.0 is out.',
     kind: ['Tool', 'Desktop app', 'Open source'],
+  },
+  {
+    id: 'precog',
+    title: 'Precog',
+    year: 2026,
+    description: 'IDE-style autocomplete for zsh, bash, and fish. My fork of the Amazon Q autocomplete, without AWS.',
+    kind: ['Tool', 'CLI', 'Open source'],
+  },
+  {
+    id: 'kindle-writer',
+    title: 'Kindle writer',
+    year: 2026,
+    description: 'A Kindle as a typewriter: a Bluetooth keyboard, an Android phone as a relay, and a small Python server.',
+    kind: ['Hardware hack', 'Android', 'Python'],
   },
 ];

@@ -1,0 +1,23 @@
+---
+// A screenshot with a caption. The image links to the full-size file.
+import { u } from '../lib/url';
+
+interface Props {
+  /** Site path of the image, for example /sidequests/vitraj/gallery.avif */
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  title: string;
+  caption: string;
+  /** Phone screenshot: smaller image on a framed ground. */
+  narrow?: boolean;
+  /** Put the caption in the margin column (desktop). Off inside a .shot-pair. */
+  margin?: boolean;
+}
+const { src, alt, width, height, title, caption, narrow = false, margin = true } = Astro.props;
+---
+<figure class:list={['shot', { narrow, sub: margin }]}>
+  <a href={u(src)}><img src={u(src)} alt={alt} width={width} height={height} loading="lazy" decoding="async"></a>
+  <figcaption><strong>{title}</strong>{caption}</figcaption>
+</figure>

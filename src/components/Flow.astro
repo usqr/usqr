@@ -1,0 +1,13 @@
+---
+// Numbered steps with arrows between them: a small diagram of how the parts connect.
+interface Props {
+  label: string;
+  steps: readonly (readonly [string, string])[];
+  caption?: string;
+}
+const { label, steps, caption } = Astro.props;
+---
+<figure class="flow" aria-label={label}>
+  <ol>{steps.map(([name, text]) => <li><strong>{name}</strong><span>{text}</span></li>)}</ol>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
