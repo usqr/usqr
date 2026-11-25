@@ -1,0 +1,87 @@
+/* Sidequest pages: screenshots, charts, flows, and stats. Load after site.css and brandbook.css.
+ * No JavaScript: hover uses CSS and the native title tooltip. Charts are tables, so screen readers get the data.
+ */
+
+.sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- Screenshot: image in the text column, caption in the margin column (desktop) ---------- */
+.sec > * + .shot, .sec > * + .shot-pair, .sec > * + .chart, .sec > * + .flow, .sec > * + .stats, .sec > * + .term { margin-top: var(--space-8); }
+.shot { margin: 0; }
+.shot a { display: block; border: var(--rule); background: var(--bg); }
+.shot a:hover { border-color: var(--fg-2); }
+.shot img { display: block; inline-size: 100%; block-size: auto; }
+.shot figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); max-width: 46ch; }
+.shot figcaption strong { display: block; font-family: var(--font-serif); font-weight: var(--w-serif-bold); color: var(--fg); }
+.shot.narrow img { max-inline-size: 22rem; margin-inline: auto; }
+.shot.narrow a { padding: var(--space-4); }
+.shot-pair { display: grid; align-items: start; gap: var(--space-6) var(--space-5); }
+@media (min-width: 640px) { .shot-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+@media (min-width: 1024px) {
+  .shot.sub > a, .shot.sub > .shot-pair { grid-column: text; grid-row: 1; }
+  .shot.sub > figcaption { grid-column: margin; grid-row: 1; align-self: end; justify-self: end; margin-top: 0; text-align: end; max-width: 30ch; }
+}
+
+/* ---------- Chart: a table drawn as bars. --v = value / max (0..1). ---------- */
+.chart { margin: 0; max-width: var(--measure); }
+.chart table { inline-size: 100%; border-collapse: collapse; }
+.chart caption { text-align: start; margin-bottom: var(--space-4); font-family: var(--font-serif); font-weight: var(--w-serif-bold); font-size: var(--s1); }
+.chart figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); }
+.chart .bar { display: block; border-radius: 4px 4px 0 0; background: var(--accent-text); }
+.chart .val { font-size: var(--text-xs); color: var(--fg); font-variant-numeric: lining-nums; }
+.chart th, .chart td { padding: 0; border: 0; vertical-align: baseline; }
+.chart th { font-family: var(--font-sans); font-weight: 400; font-size: var(--text-xs); color: var(--meta); }
+.chart tr:hover .bar { background: var(--fg); }
+
+/* Columns: one column for each period, values over time. */
+.chart-cols tbody { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.chart-cols tr { display: flex; flex-direction: column-reverse; }
+.chart-cols th { padding: var(--space-2) 2px 0; text-align: center; line-height: 1.25; }
+.chart-cols td { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; block-size: 11rem; padding-inline: 1px; border-bottom: 1px solid var(--fg); }
+.chart-cols .bar { inline-size: min(100%, 2.5rem); block-size: calc(var(--v) * 9rem); }
+.chart-cols .val { order: -1; margin-bottom: var(--space-1); visibility: hidden; }
+.chart-cols tr.is-mark .val, .chart-cols tr:hover .val { visibility: visible; }
+
+/* Bars: one bar for each item, values side by side. */
+.chart-bars tbody { display: grid; gap: var(--space-2); }
+.chart-bars tr { display: grid; grid-template-columns: minmax(7rem, 2fr) 5fr; align-items: center; gap: var(--space-3); }
+.chart-bars th { text-align: end; font-size: var(--text-sm); line-height: 1.25; color: var(--fg-2); }
+.chart-bars td { padding-block: 2px; }
+.chart-bars td { display: flex; align-items: center; gap: var(--space-2); min-block-size: 1.75rem; border-inline-start: 1px solid var(--fg); }
+.chart-bars .bar { block-size: 1.25rem; inline-size: max(2px, calc(var(--v) * (100% - 4.5rem))); border-radius: 0 4px 4px 0; }
+
+/* ---------- Flow: steps with arrows (left to right on wide screens) ---------- */
+.flow { margin: 0; }
+.flow ol { display: grid; gap: var(--space-5); padding: 0; list-style: none; counter-reset: step; }
+.flow li { position: relative; padding: var(--space-3) var(--space-4) var(--space-4); border-top: 2px solid var(--fg); background: var(--bg); counter-increment: step; }
+.flow li::before { content: counter(step, decimal-leading-zero); display: block; font-family: var(--font-serif); font-size: var(--text-xs); color: var(--meta); font-variant-numeric: oldstyle-nums; }
+.flow li strong { display: block; font-family: var(--font-serif); font-weight: var(--w-serif-bold); }
+.flow li span { display: block; margin-top: var(--space-1); font-size: var(--text-sm); color: var(--fg-2); }
+.flow li + li::after { content: "↓"; position: absolute; inset-block-start: calc(-1 * var(--space-5)); inset-inline-start: var(--space-4); line-height: var(--space-5); color: var(--accent-text); }
+.flow figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); }
+@media (min-width: 768px) {
+  .flow ol { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--space-6); }
+  .flow li + li::after { content: "→"; inset-block-start: var(--space-3); inset-inline-start: calc(-1 * var(--space-6)); inline-size: var(--space-6); text-align: center; }
+}
+
+/* ---------- Stats: a row of large numbers ---------- */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: var(--space-5); margin: 0; }
+/* The number (dd) shows over its label (dt). */
+.stats div { display: flex; flex-direction: column-reverse; justify-content: flex-end; padding-top: var(--space-3); border-top: 2px solid var(--fg); }
+.stats dd { margin: 0; font-family: var(--font-serif); font-weight: var(--w-serif-bold); font-size: var(--s4); line-height: 1.1; font-variant-numeric: lining-nums; }
+.stats dt { margin-top: var(--space-1); font-size: var(--text-sm); color: var(--fg-2); }
+
+/* ---------- Terminal illustration (drawn in HTML, not a screenshot) ---------- */
+.term { margin: 0; }
+.term-win { padding: var(--space-4) var(--space-5) var(--space-8); border-radius: 6px; background: #1d1c24; color: #e9e8ee; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: var(--text-sm); }
+.term-win p { margin: 0; }
+.term-prompt { color: #9e9daa; }
+.term-caret { display: inline-block; inline-size: 0.6em; block-size: 1.1em; vertical-align: text-bottom; background: var(--usqr-gold); }
+.term-pop { inline-size: min(100%, 30rem); margin: var(--space-2) 0 0 6ch; border: 1px solid #4d4c5a; border-radius: 6px; background: #26252f; box-shadow: 0 8px 24px rgb(0 0 0 / 0.35); overflow: hidden; font-family: var(--font-sans); }
+.term-pop li { display: grid; grid-template-columns: 1.5rem auto 1fr; align-items: baseline; gap: var(--space-2); padding: var(--space-1) var(--space-3); }
+.term-pop li[aria-current] { background: #3a3946; }
+.term-pop .ico { color: var(--usqr-gold); text-align: center; }
+.term-pop b { font-weight: 600; }
+.term-pop i { font-style: normal; font-size: var(--text-xs); color: #a9a8b4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.term-pop .desc { padding: var(--space-2) var(--space-3); border-top: 1px solid #4d4c5a; font-size: var(--text-xs); color: #c9c8d2; }
+.term figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); }

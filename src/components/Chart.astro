@@ -1,0 +1,36 @@
+---
+// A bar chart drawn with CSS from a table. One series, so the caption names it and no legend is necessary.
+// Hover shows the value (CSS and the native title tooltip). Screen readers read the table.
+import { chartPoints, type ChartPoint } from '../lib/chart';
+
+interface Props {
+  caption: string;
+  data: ChartPoint[];
+  /** The unit of the values, for the table header and the tooltips. */
+  unit: string;
+  /** cols = values over time, bars = values side by side. */
+  kind?: 'cols' | 'bars';
+  /** Indexes of the columns that always show their value. Default: the largest value. */
+  mark?: number[];
+  note?: string;
+  /** Text after each value, for example % */
+  suffix?: string;
+}
+const { caption, data, unit, kind = 'cols', mark, note, suffix = '' } = Astro.props;
+const points = chartPoints(data, mark);
+---
+<figure class={`chart chart-${kind}`}>
+  <table>
+    <caption>{caption}</caption>
+    <thead class="sr-only"><tr><th scope="col">{kind === 'cols' ? 'Period' : 'Item'}</th><th scope="col">{unit}</th></tr></thead>
+    <tbody>
+      {points.map((p) => (
+        <tr class:list={{ 'is-mark': p.marked }} style={`--v: ${p.ratio}`} title={`${p.label}: ${p.text} ${unit}`}>
+          <th scope="row">{p.label}</th>
+          <td><span class="bar" aria-hidden="true"></span><span class="val">{p.text}{suffix}</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  {note && <figcaption>{note}</figcaption>}
+</figure>

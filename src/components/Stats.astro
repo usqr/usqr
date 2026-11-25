@@ -1,0 +1,8 @@
+---
+// A row of large numbers, each with a short label.
+interface Props {
+  items: readonly (readonly [string, string])[];
+}
+const { items } = Astro.props;
+---
+<dl class="stats">{items.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
