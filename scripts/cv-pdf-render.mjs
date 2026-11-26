@@ -1,8 +1,8 @@
 // Renders the print CV page to a PDF. Used by the build (cv-pdf.mjs) and by the dev server.
-
-/** The file name of the PDF CV, at the site root. Pages link to it, and readers save it with this name. */
-export const CV_PDF = 'Datkowski_Lukasz_CV.pdf';
 // Size, margins, and the running footer come from @page in src/styles/print.css.
+
+/** The file name of the PDF CV, at the site root. The links use `download`, so the browser saves the file. */
+export const CV_PDF = 'Datkowski_Lukasz_CV.pdf';
 
 const trim = (base) => base.replace(/\/$/, '');
 
