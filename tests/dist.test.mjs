@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { CV_PDF } from '../scripts/cv-pdf-render.mjs';
 
 const dist = new URL('../dist/', import.meta.url).pathname;
 const base = (process.env.BASE ?? '/usqr').replace(/\/$/, '');
@@ -18,7 +19,7 @@ const htmlFiles = existsSync(dist) ? files(dist).filter((f) => f.endsWith('.html
 const pages = htmlFiles.map((f) => ({ name: relative(dist, f), html: readFileSync(f, 'utf8') }));
 
 test('dist exists with the places from the flow', () => {
-  for (const p of ['index.html', 'blog/index.html', 'skills/index.html', 'colophon/index.html', '404.html', 'rss.xml', 'cv.pdf']) {
+  for (const p of ['index.html', 'blog/index.html', 'skills/index.html', 'colophon/index.html', '404.html', 'rss.xml', CV_PDF]) {
     assert.ok(existsSync(join(dist, p)), `missing ${p}`);
   }
 });
@@ -128,4 +129,13 @@ test('each project sidequest links its source in the intro and jumps to "Try it"
 test('the print CV links the website', () => {
   const html = pages.find((p) => p.name === 'cv/index.html')?.html ?? '';
   assert.match(html, new RegExp(`Website: <a href="https://[^"/]+${base}/">`));
+});
+
+test('the PDF CV links download the file', () => {
+  for (const name of ['index.html', 'colophon/index.html']) {
+    const html = pages.find((p) => p.name === name)?.html ?? '';
+    const links = html.match(new RegExp(`<a [^>]*href="${base}/${CV_PDF}"[^>]*>`, 'g')) ?? [];
+    assert.ok(links.length > 0, name);
+    for (const a of links) assert.match(a, /\sdownload[\s>=]/, name);
+  }
 });

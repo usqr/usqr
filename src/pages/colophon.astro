@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { skillUrl, u } from '../lib/url';
+import { CV_PDF } from '../../scripts/cv-pdf-render.mjs';
 
 const sections = [
   { id: 'stack', title: 'Stack' },
@@ -63,7 +64,7 @@ const title = (id: SectionId) => sections.find((s) => s.id === id)!.title;
     </section>
     <section class="sec mgrid" id="print" aria-labelledby="print-h">
       <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('print')}</span><h2 id="print-h">{title('print')}</h2></div>
-      <p class="prose-p">The <a href={u('/cv/')}>print CV</a> is two A4 pages with a print stylesheet. The page grid uses root-2 parts, and each page has a footer with my name and the page number. The build makes <a href={u('/cv.pdf')}>the PDF</a> from the same page.</p>
+      <p class="prose-p">The <a href={u('/cv/')}>print CV</a> is two A4 pages with a print stylesheet. The page grid uses root-2 parts, and each page has a footer with my name and the page number. The build makes <a href={u(`/${CV_PDF}`)} download>the PDF</a> from the same page.</p>
     </section>
   </div>
 </Base>

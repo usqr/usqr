@@ -7,6 +7,7 @@ import { profile } from '../data/profile';
 import { areas } from '../data/skills';
 import { getEducation, getPosts, getRoles } from '../lib/content';
 import { u } from '../lib/url';
+import { CV_PDF } from '../../scripts/cv-pdf-render.mjs';
 
 const [roles, education, posts] = await Promise.all([getRoles(), getEducation(), getPosts()]);
 const latest = posts.slice(0, 3);
@@ -21,7 +22,7 @@ const areaLink: Record<string, string> = { frontend: 'Frontend skills', ux: 'UX 
       <p class="hybrid">{profile.hybrid.join(' · ')}</p>
       <p class="standfirst">{profile.statement}</p>
       <ul class="proof">
-        <li><a href={u('/cv.pdf')}>CV as PDF</a></li>
+        <li><a href={u(`/${CV_PDF}`)} download>CV as PDF</a></li>
         {profile.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
       </ul>
     </div>
