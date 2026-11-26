@@ -5,7 +5,7 @@ interface Props {
 }
 const { links } = Astro.props;
 ---
-<ul class="head-links">
+<ul class="head-links" aria-label="Project links">
   {links.map(([text, href]) => <li><a href={href}>{text}</a></li>)}
-  <li><a href="#try">How to try it ↓</a></li>
+  <li><a href="#try">How to try it <span aria-hidden="true">↓</span></a></li>
 </ul>
