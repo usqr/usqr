@@ -124,3 +124,8 @@ test('each project sidequest links its source in the intro and jumps to "Try it"
     assert.match(html, /id="try"/, id);
   }
 });
+
+test('the print CV links the website', () => {
+  const html = pages.find((p) => p.name === 'cv/index.html')?.html ?? '';
+  assert.match(html, /Website: <a href="https:\/\/[^"]+\/">/);
+});
