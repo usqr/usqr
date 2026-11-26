@@ -85,3 +85,7 @@
 .term-pop i { font-style: normal; font-size: var(--text-xs); color: #a9a8b4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .term-pop .desc { padding: var(--space-2) var(--space-3); border-top: 1px solid #4d4c5a; font-size: var(--text-xs); color: #c9c8d2; }
 .term figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); }
+
+/* Quick links under the page intro */
+.head-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: var(--space-4) 0 0; padding: 0; list-style: none; }
+.head-links a { font-weight: 600; }

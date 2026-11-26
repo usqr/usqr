@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Shot from '../../components/Shot.astro';
 import Flow from '../../components/Flow.astro';
 import Stats from '../../components/Stats.astro';
+import HeadLinks from '../../components/HeadLinks.astro';
 import { u } from '../../lib/url';
 import '../../styles/brandbook.css';
 import '../../styles/sidequest.css';
@@ -52,6 +53,7 @@ const afternoon = [
       <div>
         <h1>Kindle writer</h1>
         <p class="lede">A Kindle as a typewriter without distractions. I type on a Bluetooth keyboard, and the text shows on the e-ink screen.</p>
+        <HeadLinks links={[['Source on GitHub', repo]]} />
       </div>
     </header>
 

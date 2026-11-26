@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Chart from '../../components/Chart.astro';
 import Flow from '../../components/Flow.astro';
 import Stats from '../../components/Stats.astro';
+import HeadLinks from '../../components/HeadLinks.astro';
 import { u } from '../../lib/url';
 import '../../styles/brandbook.css';
 import '../../styles/sidequest.css';
@@ -69,6 +70,7 @@ const history = [
       <div>
         <h1>Precog</h1>
         <p class="lede">Autocomplete for the terminal, as in an IDE. A dropdown shows the subcommands, options, and arguments while you type.</p>
+        <HeadLinks links={[['Release v0.1.0', release], ['Source on GitHub', repo]]} />
       </div>
     </header>
 

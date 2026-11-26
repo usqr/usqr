@@ -114,3 +114,18 @@ test('every page has the theme switch, hidden until JS shows it', () => {
     assert.ok(head.includes('data-theme-init'), `${name}: saved theme applies in <head>`);
   }
 });
+
+test('each project sidequest links its source in the intro and jumps to "Try it"', () => {
+  for (const id of ['vitraj', 'font-analysis', 'precog', 'kindle-writer']) {
+    const html = pages.find((p) => p.name === `sidequests/${id}/index.html`)?.html ?? '';
+    const links = html.match(/<ul class="head-links"[^>]*>.*?<\/ul>/s)?.[0] ?? '';
+    assert.match(links, /href="https:\/\/github\.com\/usqr\//, id);
+    assert.match(links, /href="#try"/, id);
+    assert.match(html, /id="try"/, id);
+  }
+});
+
+test('the print CV links the website', () => {
+  const html = pages.find((p) => p.name === 'cv/index.html')?.html ?? '';
+  assert.match(html, new RegExp(`Website: <a href="https://[^"/]+${base}/">`));
+});
