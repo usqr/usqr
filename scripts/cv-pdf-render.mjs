@@ -21,10 +21,9 @@ export async function renderCvPdf(url) {
   }
 }
 
-/** The CV page URL on a server at `origin` (or on localhost:`origin` when it is a port). */
+/** The CV page URL on a server at `origin`, for example http://localhost:4321. */
 export function cvUrl(origin, base = process.env.BASE ?? '/usqr') {
-  const root = typeof origin === 'number' ? `http://localhost:${origin}` : origin;
-  return new URL(`${trim(base)}/cv/`, root).href;
+  return new URL(`${trim(base)}/cv/`, origin).href;
 }
 
 /** True for a request to the PDF path that the build makes: <base>/cv.pdf, with or without a query. */
@@ -38,7 +37,7 @@ function cvPdfHandler(getBase, https) {
     // Vite removes the base from req.url. originalUrl keeps the full path.
     if (!isCvPdfPath(req.originalUrl ?? req.url, getBase())) return next();
     try {
-      const origin = `http${https ? 's' : ''}://${req.headers.host}`;
+      const origin = `http${https ? 's' : ''}://${req.headers.host ?? 'localhost'}`;
       const pdf = await renderCvPdf(cvUrl(origin, getBase()));
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Cache-Control', 'no-store');

@@ -6,7 +6,7 @@ import { cvUrl, renderCvPdf } from './cv-pdf-render.mjs';
 
 const server = await preview({ logLevel: 'warn' });
 try {
-  await writeFile('dist/cv.pdf', await renderCvPdf(cvUrl(server.port)));
+  await writeFile('dist/cv.pdf', await renderCvPdf(cvUrl(`http://localhost:${server.port}`)));
   console.log('cv.pdf: done');
 } finally {
   await server.stop();
