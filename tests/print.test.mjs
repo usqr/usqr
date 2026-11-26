@@ -1,11 +1,12 @@
 // Checks the print layout in Chromium. Run `pnpm build` first.
 // Chromium writes PDF text in paint order. Positioned, transformed, and floated boxes paint
-// after the normal flow, so their text moves to the end of /cv.pdf and ATS tools read it out of order.
+// after the normal flow, so their text moves to the end of the PDF and ATS tools read it out of order.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { preview } from 'astro';
 import { chromium } from 'playwright';
+import { CV_PDF } from '../scripts/cv-pdf-render.mjs';
 
 const base = (process.env.BASE ?? '/usqr').replace(/\/$/, '');
 let server;
@@ -76,15 +77,15 @@ test('print CV: the sheets stay light in the dark theme, on screen and in print'
   assert.deepEqual([print.color, print.bg], ['rgb(64, 63, 76)', '#fff']);
 });
 
-test('/cv.pdf has two A4 pages at most', () => {
-  const pdf = readFileSync(new URL('../dist/cv.pdf', import.meta.url), 'latin1');
+test('the PDF CV has two A4 pages at most', () => {
+  const pdf = readFileSync(new URL(`../dist/${CV_PDF}`, import.meta.url), 'latin1');
   const pages = pdf.match(/\/Type\s*\/Page\b(?!s)/g)?.length ?? 0;
   assert.ok(pages >= 1 && pages <= 2, `${pages} pages`);
   assert.match(pdf, /\/MediaBox\s*\[0 0 59[45]\.\d+ 841\.\d+\]/);
 });
 
-test('/cv.pdf embeds Lato and Bitter and no other font', () => {
-  const pdf = readFileSync(new URL('../dist/cv.pdf', import.meta.url), 'latin1');
+test('the PDF CV embeds Lato and Bitter and no other font', () => {
+  const pdf = readFileSync(new URL(`../dist/${CV_PDF}`, import.meta.url), 'latin1');
   const fonts = [...new Set([...pdf.matchAll(/\/FontName\s*\/(?:[A-Z]{6}\+)?([\w-]+)/g)].map((m) => m[1]))];
   assert.ok(fonts.some((f) => /^Lato/.test(f)), fonts.join());
   assert.ok(fonts.some((f) => /^Bitter/.test(f)), fonts.join());

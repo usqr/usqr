@@ -1,4 +1,7 @@
-// Renders the print CV page to a PDF. Used by the build (cv-pdf.mjs) and by the dev server (/cv.pdf).
+// Renders the print CV page to a PDF. Used by the build (cv-pdf.mjs) and by the dev server.
+
+/** The file name of the PDF CV, at the site root. Pages link to it, and readers save it with this name. */
+export const CV_PDF = 'Datkowski_Lukasz_CV.pdf';
 // Size, margins, and the running footer come from @page in src/styles/print.css.
 
 const trim = (base) => base.replace(/\/$/, '');
@@ -26,12 +29,12 @@ export function cvUrl(origin, base = process.env.BASE ?? '/usqr') {
   return new URL(`${trim(base)}/cv/`, origin).href;
 }
 
-/** True for a request to the PDF path that the build makes: <base>/cv.pdf, with or without a query. */
+/** True for a request to the PDF path that the build makes: <base>/CV_PDF, with or without a query. */
 export function isCvPdfPath(url, base) {
-  return (url ?? '').split('?')[0] === `${trim(base)}/cv.pdf`;
+  return (url ?? '').split('?')[0] === `${trim(base)}/${CV_PDF}`;
 }
 
-/** Connect middleware for the dev server: render /cv.pdf from the live /cv/ page. */
+/** Connect middleware for the dev server: render the PDF from the live /cv/ page. */
 function cvPdfHandler(getBase, https) {
   return async (req, res, next) => {
     // Vite removes the base from req.url. originalUrl keeps the full path.
@@ -48,7 +51,7 @@ function cvPdfHandler(getBase, https) {
   };
 }
 
-/** Astro integration: in `astro dev`, serve <base>/cv.pdf as the build does. */
+/** Astro integration: in `astro dev`, serve <base>/CV_PDF as the build does. */
 export function cvPdfDev() {
   let base = '/';
   return {

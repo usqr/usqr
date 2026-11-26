@@ -1,4 +1,4 @@
-/* Direction D: print CV page (/cv/) and /cv.pdf. Load after tokens.css and site.css.
+/* Direction D: print CV page (/cv/) and the PDF CV. Load after tokens.css and site.css.
  * Source: design/mockups/d/print.css.
  * A4 is a root-2 rectangle: 210 × 297 mm = 1 : 1.414. All page parts derive from it.
  *   --u     = 210 mm / (10 × √2) = 14.85 mm   outer side margin

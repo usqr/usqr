@@ -18,7 +18,7 @@ const htmlFiles = existsSync(dist) ? files(dist).filter((f) => f.endsWith('.html
 const pages = htmlFiles.map((f) => ({ name: relative(dist, f), html: readFileSync(f, 'utf8') }));
 
 test('dist exists with the places from the flow', () => {
-  for (const p of ['index.html', 'blog/index.html', 'skills/index.html', 'colophon/index.html', '404.html', 'rss.xml', 'cv.pdf']) {
+  for (const p of ['index.html', 'blog/index.html', 'skills/index.html', 'colophon/index.html', '404.html', 'rss.xml', 'Datkowski_Lukasz_CV.pdf']) {
     assert.ok(existsSync(join(dist, p)), `missing ${p}`);
   }
 });
