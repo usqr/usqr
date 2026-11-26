@@ -1,0 +1,11 @@
+---
+// Quick links under the page intro: the main actions, then a jump to the "Try it" section.
+interface Props {
+  links: readonly (readonly [string, string])[];
+}
+const { links } = Astro.props;
+---
+<ul class="head-links">
+  {links.map(([text, href]) => <li><a href={href}>{text}</a></li>)}
+  <li><a href="#try">How to try it ↓</a></li>
+</ul>

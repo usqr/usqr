@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Shot from '../../components/Shot.astro';
 import Chart from '../../components/Chart.astro';
 import Stats from '../../components/Stats.astro';
+import HeadLinks from '../../components/HeadLinks.astro';
 import { u } from '../../lib/url';
 import '../../styles/brandbook.css';
 import '../../styles/sidequest.css';
@@ -77,6 +78,7 @@ const features = [
       <div>
         <h1>vitraj</h1>
         <p class="lede">A dual-pane file manager for macOS. It is my fork of fman, with file preview, a gallery view, and themes.</p>
+        <HeadLinks links={[['Download 2.0.0 (DMG)', release], ['Changelog', changelog], ['Source on GitHub', repo]]} />
       </div>
     </header>
 

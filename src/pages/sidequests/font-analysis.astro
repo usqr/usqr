@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Shot from '../../components/Shot.astro';
 import Chart from '../../components/Chart.astro';
 import Stats from '../../components/Stats.astro';
+import HeadLinks from '../../components/HeadLinks.astro';
 import { u } from '../../lib/url';
 import '../../styles/brandbook.css';
 import '../../styles/sidequest.css';
@@ -68,6 +69,7 @@ const features = [
       <div>
         <h1>Font analysis app</h1>
         <p class="lede">A library for font files. It scans folders, measures each font, and lets me find and compare fonts by their x-height, contrast, weight, and width.</p>
+        <HeadLinks links={[['Open the live demo', demo], ['Source on GitHub', repo]]} />
       </div>
     </header>
 
