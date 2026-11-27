@@ -1,12 +1,12 @@
 {
-  "brand/portrait.avif": "4194056fe4075beb",
-  "sidequests/font-analysis/analyze.avif": "8f696b517560da3f",
-  "sidequests/font-analysis/compare.avif": "40144a365a3d343a",
-  "sidequests/font-analysis/library.avif": "7af89fd3d87a60f7",
-  "sidequests/kindle-writer/android-app.avif": "5d167631d141d4ac",
-  "sidequests/kindle-writer/keyboard-page.avif": "a8efd857fe1fbb07",
-  "sidequests/kindle-writer/kindle-webcam.avif": "3c731cb3a5b28ac7",
-  "sidequests/vitraj/gallery.avif": "c5ec9ba4d71f6d29",
-  "sidequests/vitraj/preview-pdf.avif": "b75859288b307cc2",
-  "sidequests/vitraj/preview-svg.avif": "23d9a46ffab20c49"
+  "brand/portrait.png": "42bede0dafe6be70",
+  "sidequests/font-analysis/analyze.png": "598375f2c8ec47f3",
+  "sidequests/font-analysis/compare.png": "11ca0fc41dff3150",
+  "sidequests/font-analysis/library.png": "0b34810b257e5cd2",
+  "sidequests/kindle-writer/android-app.png": "0dff70573c21f2a0",
+  "sidequests/kindle-writer/keyboard-page.png": "c4c3c61968742365",
+  "sidequests/kindle-writer/kindle-webcam.png": "233ee8bfe91950d9",
+  "sidequests/vitraj/gallery.png": "c451721f4cdb694d",
+  "sidequests/vitraj/preview-pdf.png": "92eb87b3d150a1da",
+  "sidequests/vitraj/preview-svg.png": "6dfc42bfc1c33a15"
 }
