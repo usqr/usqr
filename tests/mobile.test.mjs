@@ -10,7 +10,7 @@ const base = (process.env.BASE ?? '/usqr').replace(/\/$/, '');
 const dist = new URL('../dist/', import.meta.url).pathname;
 
 const pages = readdirSync(dist, { recursive: true })
-  .filter((f) => f.endsWith('index.html'))
+  .filter((f) => f.endsWith('.html'))
   .map((f) => '/' + relative(dist, join(dist, f)).replace(/index\.html$/, ''));
 
 let server;
@@ -31,12 +31,16 @@ async function eachPage(width, find) {
   const page = await browser.newPage({ viewport: { width, height: 640 } });
   const problems = [];
   for (const path of pages) {
-    await page.goto(`http://localhost:${server.port}${base}${path}`);
+    const res = await page.goto(`http://localhost:${server.port}${base}${path}`);
+    assert.ok(res?.ok(), `${path}: HTTP ${res?.status()}`);
     for (const p of await page.evaluate(find)) problems.push(`${path} ${p}`);
   }
   await page.close();
   return problems;
 }
+
+const landmarkRoles = ['banner', 'navigation', 'main', 'contentinfo', 'complementary', 'region', 'search']
+  .map((r) => `[role=${r}]`).join(', ');
 
 // Visible elements that contain text of their own, with a short label for the messages.
 const textElements = () => [...document.body.querySelectorAll('*')]
@@ -53,7 +57,7 @@ test('no page scrolls horizontally at 320px (WCAG 1.4.10)', async () => {
 
 test('all visible text is inside a landmark', async () => {
   const outside = await eachPage(390, `(${textElements})()
-    .filter(({ el }) => !el.closest('header, nav, main, footer, aside, [role], .skip'))
+    .filter(({ el }) => !el.closest('header, nav, main, footer, aside, .skip, ' + ${JSON.stringify(landmarkRoles)}))
     .map(({ label }) => label)`);
   assert.deepEqual(outside, []);
 });
