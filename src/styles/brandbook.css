@@ -37,6 +37,7 @@
 .bb-flow h3 { margin-top: var(--space-8); font-size: var(--s1); }
 .bb-flow h3 + * { margin-top: var(--space-3); }
 .bb-note { font-size: var(--text-sm); color: var(--fg-2); }
+.bb-dl { display: inline-block; padding-block: 0.1875rem; } /* a link alone on its line: 24px target (WCAG 2.5.8) */
 .bb-cap { margin-top: var(--space-2); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--meta); }
 .bb-list { padding-inline-start: 1.2em; list-style: square; }
 .bb-list li + li { margin-top: var(--space-2); }
