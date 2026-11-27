@@ -18,7 +18,7 @@ const pages = sheets.length;
 const website = new URL(import.meta.env.BASE_URL, Astro.site).href;
 ---
 <Base title="Print CV" bodyClass="cvp" mainClass="sheets" description={`${fullName}: CV in two A4 pages, ready to print or save as a PDF.`}>
-  <p slot="before-main" class="cvp-note wrap screen-only">Two A4 pages. Use the print command of your browser to print this page or to save it as a PDF.</p>
+  <p class="cvp-note screen-only">Two A4 pages. Use the print command of your browser to print this page or to save it as a PDF.</p>
 
   <div class="sheet">
     <div class="sheet-body">
