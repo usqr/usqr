@@ -27,7 +27,7 @@
 .bb-title { display: flex; flex-wrap: wrap; align-items: center; gap: 0 0.3em; }
 .bb-title > span { font-family: var(--font-sans); font-weight: 400; letter-spacing: 0; }
 .bb-title-mark { inline-size: 0.95em; color: var(--accent); }
-.un { font-family: var(--font-sans); font-weight: 300; }
+.un { font-family: var(--font-sans); font-weight: 200; } /* LatoVar Thin, as Lato Thin in the print brandbook */
 .sq { font-family: var(--font-sans); font-weight: 400; }
 /* Logotype: the original gold in the two themes. WCAG 1.4.3 has no contrast minimum for logotypes. */
 .bb-title .sq { color: var(--usqr-gold); }
@@ -91,7 +91,7 @@
 .bb-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: var(--space-4); margin-top: var(--space-4); }
 .bb-swatch { padding: var(--space-2) var(--space-2) var(--space-3); border: var(--rule); background: var(--bg); }
 .bb-swatch .chip { display: flex; align-items: flex-end; aspect-ratio: 1.25; padding: var(--space-2) var(--space-3); }
-/* Swatch name: Lato Light, large text (3 : 1 contrast or more on its color) */
+/* Swatch name: LatoVar Light, large text (3 : 1 contrast or more on its color) */
 .bb-swatch .chip span { font-family: var(--font-sans); font-weight: 300; font-size: 1.75rem; line-height: 1; }
 .bb-swatch dl { display: grid; gap: 0; margin-top: var(--space-3); padding-inline: var(--space-1); font-size: var(--text-xs); }
 .bb-swatch dl div { display: flex; gap: var(--space-2); }
@@ -112,6 +112,14 @@
 .spec-row { margin-top: var(--space-2); font-size: var(--s1); }
 .spec-bitter .spec-num { font-weight: var(--w-serif); font-variant-numeric: oldstyle-nums; letter-spacing: 0.06em; }
 .w300 { font-weight: 300; } .w700 { font-weight: 700; }
+/* LatoVar: the "Aa" sweeps from Hairline to Black. Static when the user prefers reduced motion. */
+@property --spec-w { syntax: "<number>"; inherits: true; initial-value: 400; }
+@keyframes spec-w { from { --spec-w: 100; } to { --spec-w: 900; } }
+.spec-var span { font-weight: var(--spec-w); }
+.spec-var { animation: spec-w 5s ease-in-out infinite alternate; }
+.spec-var span + span { animation: spec-w 5s ease-in-out -5s infinite alternate; }
+@media (prefers-reduced-motion: reduce) { .spec-var, .spec-var span + span { animation: none; } .spec-var span:first-child { --spec-w: 200; } .spec-var span + span { --spec-w: 700; } }
+.spec-ramp { display: flex; flex-wrap: wrap; gap: 0 0.5em; font-variant-numeric: lining-nums; }
 .bb-pair { font-family: var(--font-sans); font-size: var(--s4); line-height: 1.1; }
 .bb-scale { display: grid; gap: var(--space-2); font-family: var(--font-serif); font-weight: var(--w-serif-bold); line-height: 1.1; }
 .bb-scale li { padding-bottom: var(--space-2); border-bottom: 1px solid var(--border-soft); }

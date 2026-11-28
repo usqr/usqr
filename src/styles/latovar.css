@@ -1,0 +1,94 @@
+/* LatoVar sidequest: the animated specimen and the two figures. Load after sidequest.css.
+ * The specimen is CSS only. One registered custom property, --wght, drives the text, the axis thumb, and the number.
+ * The browser can animate a registered property, and the children inherit its value in each frame.
+ */
+@property --wght { syntax: "<number>"; inherits: true; initial-value: 400; }
+/* counter() needs an integer: --wn is the same value, rounded. */
+@property --wn { syntax: "<integer>"; inherits: true; initial-value: 400; }
+/* The weight of one letter in the wave. Not inherited: each letter has its own value. */
+@property --lw { syntax: "<number>"; inherits: false; initial-value: 400; }
+
+@keyframes vs-sweep { from { --wght: 100; --wn: 100; } to { --wght: 900; --wn: 900; } }
+@keyframes vs-wave { from { --lw: 100; } to { --lw: 900; } }
+
+/* ---------- Specimen ---------- */
+.vs { --dur: 7s; margin: 0; animation: vs-sweep var(--dur) ease-in-out infinite alternate; }
+.vs-stage { padding: var(--space-6) 0 var(--space-4); border-top: 2px solid var(--fg); overflow: hidden; }
+.vs-word { margin: 0; font-size: clamp(4.5rem, 19vw, 11rem); line-height: 0.9; letter-spacing: -0.01em; font-weight: var(--wght); white-space: nowrap; }
+.vs-ita { font-style: italic; color: var(--accent-text); }
+.vs-wave { margin: var(--space-4) 0 0; font-size: clamp(1.5rem, 5.5vw, 2.75rem); line-height: 1.2; }
+.vs-wave > span[aria-hidden] { display: inline-block; white-space: pre; font-weight: var(--lw);
+  animation: vs-wave calc(var(--dur) / 2) ease-in-out infinite alternate; animation-delay: calc(var(--i) * var(--dur) / -24); }
+
+/* The axis: a track from 100 to 900, a tick for each named instance, and a thumb at --wght. */
+.vs-axis { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: var(--space-4); margin-top: var(--space-4); }
+.vs-read { min-inline-size: 6.5ch; font-size: var(--text-sm); color: var(--meta); }
+.vs-num { font-weight: 700; color: var(--fg); font-variant-numeric: lining-nums tabular-nums; }
+.vs-num::after { counter-reset: w var(--wn); content: counter(w); }
+.vs-track { position: relative; block-size: 2rem; margin-inline: 0.75rem; border-top: 1px solid var(--fg); }
+.vs-tick { position: absolute; inset-block-start: 0; inset-inline-start: var(--at); translate: -50% 0; padding-top: 0.5rem;
+  font-size: var(--text-xs); color: var(--meta); font-variant-numeric: lining-nums; }
+.vs-tick::before { content: ""; position: absolute; inset-block-start: 0; inset-inline-start: 50%; block-size: 0.3rem; border-left: 1px solid var(--fg); }
+.vs-thumb { position: absolute; inset-block-start: 0; inset-inline-start: calc((var(--wght) - 100) / 800 * 100%);
+  inline-size: 0.875rem; block-size: 0.875rem; translate: -50% -50%; rotate: 45deg; background: var(--accent); box-shadow: 0 0 0 2px var(--bg); }
+
+/* The weight picker: radio buttons. A fixed weight stops the animation. */
+.vs-pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: var(--space-2); margin: var(--space-5) 0 0; padding: 0; border: 0; }
+.vs-pick legend { margin-bottom: var(--space-2); padding: 0; font-family: var(--font-serif); font-weight: var(--w-serif-bold); font-size: var(--text-sm); }
+.vs-opt { position: relative; display: grid; gap: 0; padding: var(--space-2) var(--space-3); border: 1px solid var(--border); cursor: pointer; font-size: var(--text-xs); color: var(--fg-2); }
+.vs-opt:hover { border-color: var(--fg-2); }
+.vs-opt i { font-style: normal; color: var(--meta); font-variant-numeric: lining-nums; }
+.vs-aa { font-size: var(--s3); line-height: 1.1; color: var(--fg); font-weight: var(--w, 400); }
+.vs-opt input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.vs-opt:has(:checked) { border-color: var(--fg); box-shadow: inset 0 -3px 0 var(--accent); color: var(--fg); }
+.vs-opt:has(:focus-visible) { box-shadow: var(--focus-ring); }
+
+.vs:has(.vs-opt:not(.vs-anim) :checked), .vs:has(.vs-opt:not(.vs-anim) :checked) .vs-wave > span { animation: none; }
+.vs:has(.vs-opt:not(.vs-anim) :checked) .vs-wave > span { --lw: var(--wght); }
+.vs:has(input[value="100"]:checked) { --wght: 100; --wn: 100; }
+.vs:has(input[value="200"]:checked) { --wght: 200; --wn: 200; }
+.vs:has(input[value="300"]:checked) { --wght: 300; --wn: 300; }
+.vs:has(input[value="400"]:checked) { --wght: 400; --wn: 400; }
+.vs:has(input[value="500"]:checked) { --wght: 500; --wn: 500; }
+.vs:has(input[value="600"]:checked) { --wght: 600; --wn: 600; }
+.vs:has(input[value="700"]:checked) { --wght: 700; --wn: 700; }
+.vs:has(input[value="800"]:checked) { --wght: 800; --wn: 800; }
+.vs:has(input[value="900"]:checked) { --wght: 900; --wn: 900; }
+
+.vs figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); }
+
+/* Reduced motion: no animation. The wave becomes a ramp from 100 to 900, the rest shows Regular. */
+@media (prefers-reduced-motion: reduce) {
+  .vs, .vs-wave > span[aria-hidden] { animation: none; }
+  .vs-wave > span[aria-hidden] { --lw: min(900, 100 + var(--i) * 50); }
+  .vs-anim { display: none; }
+}
+
+/* ---------- Interpolation: one glyph at three weights ---------- */
+.interp { margin: 0; }
+.interp-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); align-items: end; }
+.interp-all { grid-column: 1 / -1; }
+@media (min-width: 768px) {
+  .interp-row { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 2.2fr); }
+  .interp-all { grid-column: auto; }
+}
+.interp svg { display: block; inline-size: 100%; block-size: auto; overflow: visible; }
+.interp .guide { stroke: var(--border); stroke-width: 4; }
+.interp-one path { fill: var(--fg-2); }
+.interp-one.mid path { fill: var(--accent); }
+.interp-one text { font-family: var(--font-serif); font-size: 96px; fill: var(--meta); }
+.interp-all path { fill: none; stroke-width: 6; }
+.interp-all .hi { stroke: var(--fg); fill: color-mix(in srgb, var(--fg) 8%, transparent); }
+.interp-all .lo { stroke: var(--fg-2); stroke-dasharray: 14 10; }
+.interp-all .move { stroke: var(--accent-text); stroke-width: 4; }
+.interp-all .p-lo { fill: var(--bg); stroke: var(--fg-2); stroke-width: 5; }
+.interp-all .p-hi { fill: var(--accent); }
+.interp figcaption { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--fg-2); }
+
+/* ---------- Pixels: FreeType output, before and after the hinting fix ---------- */
+.pixels { display: grid; gap: var(--space-5); margin: 0; }
+.pixels-row p { margin: 0 0 var(--space-2); font-size: var(--text-sm); color: var(--fg-2); }
+.pixels-row strong { font-family: var(--font-serif); font-weight: var(--w-serif-bold); color: var(--fg); }
+.pixels svg { display: block; inline-size: 100%; max-inline-size: 40rem; block-size: auto; shape-rendering: crispEdges; border: 1px solid var(--border); fill: var(--fg); }
+.pixels .grid { fill: none; stroke: var(--border-soft); stroke-width: 0.06; }
+.pixels figcaption { font-size: var(--text-sm); color: var(--fg-2); }

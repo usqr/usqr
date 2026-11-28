@@ -85,7 +85,7 @@ const altSchemes = logoSchemes.filter((s) => s.id !== 'gold-coal');
             </li>
           ))}
         </ul>
-        <p class="bb-note">When the medium has no grayscale, use solid black or solid white. On this site the wordmark uses Lato Light: the web font files have no Thin weight.</p>
+        <p class="bb-note">When the medium has no grayscale, use solid black or solid white. On this site the wordmark uses <a href={u('/sidequests/lato-var/')}>LatoVar</a> at weight 200, the Thin instance.</p>
       </div>
     </section>
 
@@ -145,12 +145,12 @@ const altSchemes = logoSchemes.filter((s) => s.id !== 'gold-coal');
     <section class="sec mgrid" id="type" aria-labelledby="type-h">
       <div class="sec-head sub"><span class="num m" aria-hidden="true">{num('type')}</span><h2 id="type-h">{title('type')}</h2></div>
       <div class="bb-flow">
-        <p>Two families. Lato is the voice of the logo and the text. Bitter gives the headings, the labels, and the numerals. Bitter is the only serif.</p>
+        <p>Two families. Lato is the voice of the logo and the text. On the web it is <a href={u('/sidequests/lato-var/')}>LatoVar</a>, my variable build of Lato 3: one file with each weight from 100 to 900. Bitter gives the headings, the labels, and the numerals. Bitter is the only serif.</p>
         <div class="bb-specimens">
           <figure class="bb-spec spec-lato">
-            <p class="spec-aa" aria-hidden="true"><span class="w300">A</span><span class="w700">a</span></p>
-            <figcaption><strong>Lato</strong> 300 · 400 · 700. Text, interface, wordmark.</figcaption>
-            <p class="spec-row"><span class="w300">Light</span> <span>Regular</span> <span class="w700">Bold</span></p>
+            <p class="spec-aa spec-var" aria-hidden="true"><span>A</span><span>a</span></p>
+            <figcaption><strong>LatoVar</strong> 100–900, one variable file. Text 300 · 400 · 700, wordmark 200.</figcaption>
+            <p class="spec-row spec-ramp" aria-label="Nine weights from Hairline to Black">{[100, 200, 300, 400, 500, 600, 700, 800, 900].map((w) => <span style={`font-weight: ${w}`}>{w}</span>)}</p>
           </figure>
           <figure class="bb-spec spec-bitter">
             <p class="spec-aa" aria-hidden="true">Aa</p>

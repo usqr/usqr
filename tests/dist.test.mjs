@@ -91,7 +91,7 @@ test('the main nav links to Sidequests on every page', () => {
     const nav = html.match(/<nav aria-label="Main">[\s\S]*?<\/nav>/)?.[0] ?? '';
     assert.ok(nav.includes(`href="${base}/sidequests/"`), name);
   }
-  for (const p of ['sidequests/index.html', 'sidequests/brandbook/index.html', 'sidequests/font-analysis/index.html', 'sidequests/vitraj/index.html', 'sidequests/precog/index.html', 'sidequests/kindle-writer/index.html']) assert.ok(existsSync(join(dist, p)), `missing ${p}`);
+  for (const p of ['sidequests/index.html', 'sidequests/brandbook/index.html', 'sidequests/lato-var/index.html', 'sidequests/font-analysis/index.html', 'sidequests/vitraj/index.html', 'sidequests/precog/index.html', 'sidequests/kindle-writer/index.html']) assert.ok(existsSync(join(dist, p)), `missing ${p}`);
 });
 
 test('the header logo and the favicon are the fat brandmark', () => {
@@ -117,7 +117,7 @@ test('every page has the theme switch, hidden until JS shows it', () => {
 });
 
 test('each project sidequest links its source in the intro and jumps to "Try it"', () => {
-  for (const id of ['vitraj', 'font-analysis', 'precog', 'kindle-writer']) {
+  for (const id of ['lato-var', 'vitraj', 'font-analysis', 'precog', 'kindle-writer']) {
     const html = pages.find((p) => p.name === `sidequests/${id}/index.html`)?.html ?? '';
     const links = html.match(/<ul class="head-links"[^>]*>.*?<\/ul>/s)?.[0] ?? '';
     assert.match(links, /href="https:\/\/github\.com\/usqr\//, id);

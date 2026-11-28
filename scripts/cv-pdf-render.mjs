@@ -6,6 +6,23 @@ export const CV_PDF = 'Datkowski_Lukasz_CV.pdf';
 
 const trim = (base) => base.replace(/\/$/, '');
 
+/** The LatoVar weights that the print CV uses, as static files. scripts/build-fonts.sh makes them. */
+export const PDF_WEIGHTS = [300, 400, 700];
+
+/**
+ * CSS for the PDF: static LatoVar instances as data URLs, in their own family. Chromium embeds a variable font
+ * in a PDF as Type 3 glyph drawings, but a static font as a real TrueType font. A static face in the family
+ * "LatoVar" does not help: for weight 300, Chromium still selects the variable face.
+ */
+export async function pdfFontCss() {
+  const { readFile } = await import('node:fs/promises');
+  const faces = await Promise.all(PDF_WEIGHTS.map(async (w) => {
+    const data = await readFile(new URL(`./pdf-fonts/latovar-${w}.woff2`, import.meta.url));
+    return `@font-face { font-family: "LatoVar PDF"; font-style: normal; font-weight: ${w}; src: url(data:font/woff2;base64,${data.toString('base64')}) format("woff2"); }`;
+  }));
+  return `${faces.join('\n')}\n:root { --font-sans: "LatoVar PDF", "LatoVar", system-ui, sans-serif !important; }`;
+}
+
 /** Open the print CV at `url` and return the PDF bytes. */
 export async function renderCvPdf(url) {
   // Lazy import: astro.config loads this file, and playwright is only a dev dependency.
@@ -16,7 +33,8 @@ export async function renderCvPdf(url) {
     const response = await page.goto(url, { waitUntil: 'networkidle' });
     if (!response?.ok()) throw new Error(`CV page failed: ${response?.status()} ${url}`);
     await page.emulateMedia({ media: 'print' });
-    // Wait for the fonts, so that the PDF uses Lato and Bitter and not the fallback.
+    await page.addStyleTag({ content: await pdfFontCss() });
+    // Wait for the fonts, so that the PDF uses LatoVar and Bitter and not the fallback.
     await page.evaluate(() => document.fonts.ready);
     return await page.pdf({ preferCSSPageSize: true, printBackground: true });
   } finally {

@@ -1,0 +1,39 @@
+---
+// One glyph at three weights, drawn from src/data/latovar-figures.json (scripts/latovar-figures.py).
+// Left: the two masters and the interpolated Regular. Right: the masters on top of each other, with a line
+// from each point of the Hairline master to the same point of the Black master.
+import figures from '../data/latovar-figures.json';
+
+interface Props {
+  caption: string;
+}
+const { caption } = Astro.props;
+const { glyph, xHeight, width, weights, moves } = figures.interpolation;
+const names: Record<number, string> = { 100: 'Hairline 100, master', 400: 'Regular 400, interpolated', 900: 'Black 900, master' };
+const pad = 60;
+const top = -(xHeight + 120);
+const box = `${-pad} ${top} ${width + 2 * pad} ${-top + 120}`;
+const [lo, , hi] = weights;
+---
+<figure class="interp">
+  <div class="interp-row">
+    {weights.map((w) => (
+      <svg viewBox={box} role="img" aria-label={`The letter ${glyph}, ${names[w.wght]}`} class:list={['interp-one', { mid: w.wght === 400 }]}>
+        <line class="guide" x1={-pad} x2={width + pad} y1="0" y2="0" />
+        <line class="guide" x1={-pad} x2={width + pad} y1={-xHeight} y2={-xHeight} />
+        <path d={w.d} />
+        <text x={width / 2} y="100" text-anchor="middle">{w.wght}</text>
+      </svg>
+    ))}
+    <svg viewBox={box} role="img" aria-label={`The two masters of the letter ${glyph} on top of each other, with ${moves.length} lines from each Hairline point to the same Black point`} class="interp-all">
+      <line class="guide" x1={-pad} x2={width + pad} y1="0" y2="0" />
+      <line class="guide" x1={-pad} x2={width + pad} y1={-xHeight} y2={-xHeight} />
+      <path class="hi" d={hi.d} />
+      <path class="lo" d={lo.d} />
+      {moves.map(([x1, y1, x2, y2]) => <line class="move" x1={x1} y1={y1} x2={x2} y2={y2} />)}
+      {moves.map(([x, y]) => <circle class="p-lo" cx={x} cy={y} r="11" />)}
+      {moves.map(([, , x, y]) => <circle class="p-hi" cx={x} cy={y} r="11" />)}
+    </svg>
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>
