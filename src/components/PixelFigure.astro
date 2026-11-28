@@ -1,0 +1,28 @@
+---
+// FreeType pixels of a sample, before and after a hinting fix, from src/data/latovar-figures.json.
+// Each pixel is a square in an SVG path: one path for each gray level, so the figure follows the theme.
+import figures from '../data/latovar-figures.json';
+
+interface Props {
+  caption: string;
+}
+const { caption } = Astro.props;
+const { sample, px, wght, rows } = figures.hinting;
+const [before] = rows;
+const more = (r: (typeof rows)[number]) => Math.round((r.ink / before.ink - 1) * 100);
+---
+<figure class="pixels">
+  {rows.map((r, i) => (
+    <div class="pixels-row">
+      <p><strong>{r.label}</strong>{i > 0 && <span> · {more(r)}% more ink</span>}</p>
+      <svg viewBox={`0 0 ${r.width} ${r.height}`} role="img" aria-label={`“${sample}” at ${px} px, weight ${wght}: ${r.label.toLowerCase()}`}>
+        <defs>
+          <pattern id={`px-grid-${i}`} width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0H0V1" class="grid" /></pattern>
+        </defs>
+        <rect width={r.width} height={r.height} fill={`url(#px-grid-${i})`} />
+        {r.paths.map((p) => <path d={p.d} fill-opacity={p.opacity} />)}
+      </svg>
+    </div>
+  ))}
+  <figcaption>{caption}</figcaption>
+</figure>

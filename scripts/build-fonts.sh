@@ -3,33 +3,48 @@
 # Method: https://ckeditor.com/blog/optimize-font-size-with-variable-fonts/
 #   - subset to the exact characters for English + Polish (not full Unicode blocks);
 #   - use a variable font where it is smaller than the static files.
-# Source: local Lato 2 (OFL, static only) and Bitter (OFL, variable, from google/fonts ofl/bitter).
-# Hinting removed: modern browsers render well without it, and the files get much smaller.
+# Sources: LatoVar Lite (OFL, variable, my build: https://github.com/usqr/lato-var)
+# and Bitter (OFL, variable, from google/fonts ofl/bitter).
+# LatoVar keeps its TrueType hints: they are the point of that build (Windows, 9-16 px), +5 KB a file.
+# Bitter has no hints: modern browsers render it well without them, and the files get much smaller.
 set -euo pipefail
 
 SRC="${FONTS_SRC:-$HOME/_ld_/fonts}"
 # Output: the site fonts. Set FONTS_OUT to write somewhere else.
 OUT="${FONTS_OUT:-$(cd "$(dirname "$0")/../src/styles/fonts" && pwd)}"
+# LatoVar build output (lato-var: `uv run tools/latovar/pipeline.py all`) and its license.
+LATOVAR="${LATOVAR_FONTS:-$HOME/_ld_/_use_/261127_lato_var/lato-source/build/LatoVar/fonts}"
+LATOVAR_OFL="${LATOVAR_OFL:-$LATOVAR/../../../LICENSE.txt}"
 # Printable ASCII + Polish letters + typographic punctuation. U+00A0 = no-break space.
 TEXT=" !\"#\$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}~ąćęłńóśźżĄĆĘŁŃÓŚŹŻ–—„”“‘’…€•·×→©"
 FEATURES="kern,liga,clig,calt,ccmp,locl,mark,mkmk,lnum,onum,pnum,tnum"
 
-subset() { # $1 = source TTF, $2 = output name
+subset() { # $1 = source TTF, $2 = output name, $3 = --hinting or --no-hinting (default)
   uvx -q --from fonttools --with brotli pyftsubset "$1" \
     --output-file="$OUT/$2.woff2" --flavor=woff2 \
     --text="$TEXT" --unicodes=U+00A0 --layout-features="$FEATURES" \
-    --no-hinting --desubroutinize
+    "${3:---no-hinting}" --desubroutinize
 }
 
 rm -f "$OUT"/*.woff2
 
-# Lato has no variable version: static files, one for each weight.
-subset "$SRC/Lato2OFL/Lato-Light.ttf"    lato-300
-subset "$SRC/Lato2OFL/Lato-Regular.ttf"  lato-400
-subset "$SRC/Lato2OFL/Lato-Italic.ttf"   lato-400-italic
-subset "$SRC/Lato2OFL/Lato-Medium.ttf"   lato-500
-subset "$SRC/Lato2OFL/Lato-Semibold.ttf" lato-600
-subset "$SRC/Lato2OFL/Lato-Bold.ttf"     lato-700
+# LatoVar Lite: one variable file for each style, wght 100-900. The Lite version has the same
+# outlines as the full version, with 2 masters instead of 3: its files are smaller.
+subset "$LATOVAR/LatoVarLite[wght].ttf"        latovar        --hinting
+subset "$LATOVAR/LatoVarLite-Italic[wght].ttf" latovar-italic --hinting
+
+# Static LatoVar instances for the PDF CV only (scripts/cv-pdf-render.mjs). Chromium embeds a variable
+# font in a PDF as Type 3 glyph drawings. A static font goes in as a real TrueType font.
+PDF_OUT="$(cd "$(dirname "$0")" && pwd)/pdf-fonts"
+mkdir -p "$PDF_OUT"
+rm -f "$PDF_OUT"/*.woff2
+PDF_TMP="$(mktemp -d)"
+for w in 300 400 700; do
+  uvx -q --from fonttools --with skia-pathops fonttools varLib.instancer -q --remove-overlaps --update-name-table \
+    "$LATOVAR/LatoVarLite[wght].ttf" "wght=$w" -o "$PDF_TMP/latovar-$w.ttf"
+  OUT="$PDF_OUT" subset "$PDF_TMP/latovar-$w.ttf" "latovar-$w" --hinting
+done
+rm -rf "$PDF_TMP"
 
 # Bitter: one variable file, weight axis limited to 400..720.
 # The site uses 485 and 715: these match Roboto Slab 400 and 700 (ink density in Chromium).
@@ -66,6 +81,17 @@ font.save(path)' "$1" "$2" "$3"
 rename "$OUT/bitter-var.woff2" "Bitter" "Bitter-Regular"
 rename "$OUT/bitter-outline.woff2" "Bitter Outline" "BitterOutline-Regular"
 
-cp "$SRC/Lato2OFL/OFL.txt" "$OUT/Lato-OFL.txt"
+rm -f "$OUT/Lato-OFL.txt"
+cp "$LATOVAR_OFL" "$OUT/LatoVar-OFL.txt"
+# Name the LatoVar files "LatoVar" (not "LatoVar Lite"): the site and the PDF show this name.
+for f in "$OUT"/latovar*.woff2 "$PDF_OUT"/latovar-*.woff2; do
+  uvx -q --from fonttools --with brotli python -I -c '
+import sys
+from fontTools.ttLib import TTFont
+font = TTFont(sys.argv[1])
+for r in font["name"].names:
+    r.string = r.toUnicode().replace("LatoVar Lite", "LatoVar").replace("LatoVarLite", "LatoVar")
+font.save(sys.argv[1])' "$f"
+done
 cp "$SRC/Bitter/OFL.txt" "$OUT/Bitter-OFL.txt"
 ls -l "$OUT"/*.woff2

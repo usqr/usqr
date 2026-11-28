@@ -11,11 +11,10 @@ const path = ring.match(/<path[^>]*\/>/)[0];
 const tile = `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="-20 -19.75 160 160"><rect x="-20" y="-19.75" width="160" height="160" fill="#403f4c"/>${path}</svg>`;
 
 const og = `<!doctype html><style>
-@font-face { font-family: Lato; font-weight: 300; src: url(${font('lato-300.woff2')}); }
-@font-face { font-family: Lato; font-weight: 700; src: url(${font('lato-700.woff2')}); }
+@font-face { font-family: LatoVar; font-weight: 100 900; src: url(${font('latovar.woff2')}); }
 @font-face { font-family: Slab; font-weight: 400 720; src: url(${font('bitter-var.woff2')}); }
 body { margin: 0; width: 1200px; height: 630px; box-sizing: border-box; padding: 88px 96px; display: flex; flex-direction: column; justify-content: space-between;
-  background: #403f4c; color: #f8f8fb; font-family: Lato; }
+  background: #403f4c; color: #f8f8fb; font-family: LatoVar; }
 body::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .07;
   background: repeating-linear-gradient(45deg, #f8f8fb 0 1px, transparent 1px 36px), repeating-linear-gradient(-45deg, #f8f8fb 0 1px, transparent 1px 36px); }
 .ring { width: 120px; height: 120px; }

@@ -1,21 +1,18 @@
 /* unsquare (usqr) design tokens
  * Source: usqr_brandbook_026a_240427a.pdf (palette, logo, patterns),
- *         CV_083.idml (swatches, paragraph styles), fonts Lato + Bitter (Bitter replaced Roboto Slab on 2026-11-18: Bitter has oldstyle figures).
+ *         CV_083.idml (swatches, paragraph styles), fonts LatoVar + Bitter (LatoVar replaced the static Lato 2 files on 2026-11-27. Bitter replaced Roboto Slab on 2026-11-18: Bitter has oldstyle figures).
  * Names follow the OpenDesign token schema. Brand names kept as --usqr-*.
  * Contrast ratios (WCAG 2.x) in comments are against the theme --bg.
  */
-/* Self-hosted fonts: WOFF2, English + Polish characters only, no hinting.
+/* Self-hosted fonts: WOFF2, English + Polish characters only. LatoVar keeps its TrueType hints, Bitter has none.
  * Method: https://ckeditor.com/blog/optimize-font-size-with-variable-fonts/
  * Files and build script: fonts/ (build.sh).
  * font-display: swap: the brand fonts always show (optional fell back to system-ui on the first view). Preload the two critical files in the page head:
- *   fonts/lato-400.woff2 and fonts/bitter-var.woff2 (as="font" type="font/woff2" crossorigin).
+ *   fonts/latovar.woff2 and fonts/bitter-var.woff2 (as="font" type="font/woff2" crossorigin).
  */
-@font-face { font-family: "Lato"; font-style: normal; font-weight: 300; font-display: swap; src: url("fonts/lato-300.woff2") format("woff2"); }
-@font-face { font-family: "Lato"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/lato-400.woff2") format("woff2"); }
-@font-face { font-family: "Lato"; font-style: italic; font-weight: 400; font-display: swap; src: url("fonts/lato-400-italic.woff2") format("woff2"); }
-@font-face { font-family: "Lato"; font-style: normal; font-weight: 500; font-display: swap; src: url("fonts/lato-500.woff2") format("woff2"); }
-@font-face { font-family: "Lato"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/lato-600.woff2") format("woff2"); }
-@font-face { font-family: "Lato"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/lato-700.woff2") format("woff2"); }
+/* LatoVar Lite: one variable file for each style, wght 100-900 (https://github.com/usqr/lato-var). */
+@font-face { font-family: "LatoVar"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("fonts/latovar.woff2") format("woff2"); }
+@font-face { font-family: "LatoVar"; font-style: italic; font-weight: 100 900; font-display: swap; src: url("fonts/latovar-italic.woff2") format("woff2"); }
 @font-face { font-family: "Bitter"; font-style: normal; font-weight: 400 720; font-display: swap; src: url("fonts/bitter-var.woff2") format("woff2"); }
 /* Static weight-485 digits with overlaps removed: the outlined years. A variable font shows inner contours under -webkit-text-stroke. */
 @font-face { font-family: "Bitter Outline"; font-style: normal; font-weight: 400 720; font-display: swap; src: url("fonts/bitter-outline.woff2") format("woff2"); }
@@ -57,12 +54,12 @@
   --pattern-line: rgba(64, 63, 76, 0.07); /* diagonal lattice */
 
   /* Typography */
-  --font-sans: "Lato", system-ui, sans-serif;
+  --font-sans: "LatoVar", system-ui, sans-serif;
   --font-serif: "Bitter", system-ui, sans-serif; /* headings, labels, numerals. Bitter is the only serif: no serif fallback. */
   /* Bitter weights matched to Roboto Slab 400 and 700 (ink density in Chromium: -0.7% and +0.3%). */
   --w-serif: 485;
   --w-serif-bold: 715;
-  --font-mono: "Lato", system-ui, sans-serif; /* code: the site uses only Lato and Bitter */
+  --font-mono: "LatoVar", system-ui, sans-serif; /* code: the site uses only LatoVar and Bitter */
   --text-xs: 0.8125rem;  /* 13 */
   --text-sm: 0.9375rem;  /* 15 */
   --text-md: 1.125rem;   /* 18 body */

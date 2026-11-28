@@ -1,0 +1,38 @@
+---
+// An animated specimen of a variable font. CSS only: one registered custom property, --wght, drives the
+// text, the axis thumb, and the number. The radio buttons stop the animation at a named instance (:has()).
+// Reduced motion: no animation, the wave shows a static ramp.
+interface Props {
+  word: string;
+  wave: string;
+  /** Named instances: [wght, name] */
+  instances: readonly (readonly [number, string])[];
+  caption: string;
+}
+const { word, wave, instances, caption } = Astro.props;
+const letters = [...wave];
+const pos = (w: number) => `${((w - 100) / 8).toFixed(3)}%`;
+---
+<figure class="vs" aria-labelledby="vs-cap">
+  <div class="vs-stage">
+    <p class="vs-word"><span>{word}</span> <span class="vs-ita">{word}</span></p>
+    <p class="vs-wave" lang="pl"><span class="sr-only">{wave}</span>{letters.map((ch, i) => <span aria-hidden="true" style={`--i: ${i}`}>{ch}</span>)}</p>
+  </div>
+
+  <div class="vs-axis" aria-hidden="true">
+    <span class="vs-read">wght <b class="vs-num"></b></span>
+    <div class="vs-track">
+      {instances.map(([w]) => <span class="vs-tick" style={`--at: ${pos(w)}`}>{w}</span>)}
+      <span class="vs-thumb"></span>
+    </div>
+  </div>
+
+  <fieldset class="vs-pick">
+    <legend>Weight</legend>
+    <label class="vs-opt vs-anim"><input type="radio" name="vs-w" value="anim" checked><span class="vs-aa">↔</span><span>Animate</span></label>
+    {instances.map(([w, name]) => (
+      <label class="vs-opt" style={`--w: ${w}`}><input type="radio" name="vs-w" value={w}><span class="vs-aa">Aa</span><span>{name} <i>{w}</i></span></label>
+    ))}
+  </fieldset>
+  <figcaption id="vs-cap">{caption}</figcaption>
+</figure>

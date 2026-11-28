@@ -1,0 +1,190 @@
+---
+import Base from '../../layouts/Base.astro';
+import Chart from '../../components/Chart.astro';
+import Stats from '../../components/Stats.astro';
+import Flow from '../../components/Flow.astro';
+import HeadLinks from '../../components/HeadLinks.astro';
+import VarSpecimen from '../../components/VarSpecimen.astro';
+import InterpolationFigure from '../../components/InterpolationFigure.astro';
+import PixelFigure from '../../components/PixelFigure.astro';
+import { u } from '../../lib/url';
+import '../../styles/brandbook.css';
+import '../../styles/sidequest.css';
+import '../../styles/latovar.css';
+
+const repo = 'https://github.com/usqr/lato-var';
+const docs = 'https://github.com/usqr/lato-var/blob/master/docs/LatoVar.md';
+const testing = 'https://github.com/usqr/lato-var/blob/master/docs/testing.md';
+const upstream = 'https://github.com/latofonts/lato-source';
+
+const sections = [
+  { id: 'specimen', title: 'Specimen' },
+  { id: 'story', title: 'Story' },
+  { id: 'history', title: 'History' },
+  { id: 'masters', title: 'Two masters' },
+  { id: 'pipeline', title: 'Pipeline' },
+  { id: 'hinting', title: 'Hinting' },
+  { id: 'tests', title: 'Tests' },
+  { id: 'site', title: 'On this site' },
+  { id: 'try', title: 'Try it' },
+] as const;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+
+const instances = [
+  [100, 'Hairline'], [200, 'Thin'], [300, 'Light'], [400, 'Regular'], [500, 'Medium'],
+  [600, 'Semibold'], [700, 'Bold'], [800, 'Heavy'], [900, 'Black'],
+] as const;
+
+const history = [
+  ['Summer 2010', 'Łukasz Dziedzic designs Lato in Warsaw. “Lato” is the Polish word for “summer”.'],
+  ['Dec 2010', 'Version 1.010: the first release under the SIL Open Font License, with a Western character set.'],
+  ['Sep 2011', 'Version 1.100 adds the Polish diacritics.'],
+  ['2013–2014', 'Lato 2: with Adam Twardoch and Botio Nikoltchev, the family grows to more than 3,000 glyphs in nine weights with italics.'],
+  ['Sep 2018', 'The lato-source repository opens on GitHub with the Lato 3 sources (3.001-dev) in FontLab Studio 5 format.'],
+  ['Oct 2019', 'Version 3.002: FontLab VI sources and the first variable and static TTF builds.'],
+  ['Aug 2020', 'Version 3.100.dev: FontLab 7 sources with two masters, Hairline and Black, and a scripted build. Then a long pause.'],
+  ['2025', 'The sources change again in June. A commit with the tag v1.0.0 follows in September.'],
+  ['27 Nov 2026', 'My fork: LatoVar. A build pipeline in FontLab 9, fixes for the hinting and for some glyphs, and a test suite.'],
+] as const;
+
+const years = [
+  { label: '2018', value: 7 },
+  { label: '2019', value: 2 },
+  { label: '2020', value: 11 },
+  { label: '2021–24', value: 0 },
+  { label: '2025', value: 3 },
+  { label: '2026', value: 3 },
+];
+
+const steps = [
+  ['fl9', 'FontLab 9 opens a build copy of each source, with the design fixes, and exports UFO masters and a hinted variable TTF.'],
+  ['reference', 'fontc compiles the same masters into an unhinted reference font. The tests compare the two fonts.'],
+  ['finalize', 'Adds the minimum-distance links to the hinting. Writes the names, STAT, and style bits. Makes TTF and WOFF2.'],
+  ['proof', 'Renders PNG proofs and an HTML specimen for a check by eye.'],
+] as const;
+
+const failures = [
+  { label: '100 · FontLab', value: 149 },
+  { label: '100 · links', value: 11 },
+  { label: '200 · FontLab', value: 37 },
+  { label: '200 · links', value: 7 },
+  { label: '300 · FontLab', value: 29 },
+  { label: '300 · links', value: 7 },
+  { label: '400 · FontLab', value: 3 },
+  { label: '400 · links', value: 3 },
+];
+
+const stats = [
+  ['Glyphs', '≈3,050'],
+  ['Named instances', '9'],
+  ['Font files tested', '4'],
+  ['Kerning pairs compared', '1,936'],
+] as const;
+
+const sizes = [
+  { label: 'Before: 6 static Lato 2 files', value: 90.7 },
+  { label: 'LatoVar, full version, 2 files', value: 96.3 },
+  { label: 'Now: LatoVar Lite, 2 files', value: 76.4 },
+];
+---
+<Base title="LatoVar" current="sidequests" description="LatoVar: Lato as a variable font with every weight from 100 to 900, hinted in FontLab 9 and tested. This site uses it.">
+  <div class="wrap bb">
+    <header class="page-head mgrid">
+      <div class="m"><p class="kicker"><span class="usq" aria-hidden="true"></span>Sidequest</p><p class="count"><a href={u('/sidequests/')}>All sidequests</a></p></div>
+      <div>
+        <h1>LatoVar</h1>
+        <p class="lede">Lato as a variable font: one file with every weight from Hairline 100 to Black 900. I made it from the Lato 3 sources, and this site uses it for all its text.</p>
+        <HeadLinks links={[['Source on GitHub', repo], ['Pipeline documentation', docs]]} />
+      </div>
+    </header>
+
+    <section class="sec mgrid" id="specimen" aria-labelledby="specimen-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(0)}</span><h2 id="specimen-h">{sections[0].title}</h2></div>
+      <VarSpecimen word="Lato" wave="Zażółć gęślą jaźń" instances={instances}
+        caption="The font file on this page, animated with CSS only. One custom property, --wght, moves from 100 to 900 and sets the weight, the thumb on the axis, and the number. Select a weight to stop the animation." />
+    </section>
+
+    <section class="sec mgrid" id="story" aria-labelledby="story-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(1)}</span><h2 id="story-h">{sections[1].title}</h2></div>
+      <div class="bb-flow">
+        <p>Lato is the text face of my brand. Until now, this site used six static Lato 2 files: one file for each weight, and one for the italic.</p>
+        <p>Lato 3 did not get a final release. The <a href={upstream}>lato-source</a> repository has the sources and development builds only. But the sources have two masters, and two masters are all that a variable font needs.</p>
+        <p>So I forked the repository and wrote a pipeline around FontLab 9. FontLab compiles and hints the fonts. Open tools then do a check of each step. The tests found real defects: glyphs that broke between the masters, a wrong default instance, and thin strokes that disappeared at small sizes.</p>
+        <dl class="bb-facts">
+          <div><dt>Axis</dt><dd><code>wght</code> 100–900, nine named instances</dd></div>
+          <div><dt>Versions</dt><dd>Full (default Regular, 3 masters) and Lite (default Hairline, 2 masters, smaller)</dd></div>
+          <div><dt>Tools</dt><dd>FontLab 9, fontTools, fontc, FreeType, HarfBuzz, OTS, FontBakery</dd></div>
+          <div><dt>License</dt><dd>SIL Open Font License 1.1</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="sec mgrid" id="history" aria-labelledby="history-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(2)}</span><h2 id="history-h">{sections[2].title}</h2></div>
+      <div class="bb-flow">
+        <p>Sixteen years from the first sketch to this file. The dates come from the Lato changelog and the history of the repository.</p>
+        <dl class="bb-facts">
+          {history.map(([when, text]) => <div><dt>{when}</dt><dd>{text}</dd></div>)}
+        </dl>
+      </div>
+      <Chart caption="Commits in the source repository for each year" unit="commits" data={years} mark={[2, 5]}
+        note="26 commits in total. The sources did not change from 2021 to 2024." />
+    </section>
+
+    <section class="sec mgrid" id="masters" aria-labelledby="masters-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(3)}</span><h2 id="masters-h">{sections[3].title}</h2></div>
+      <div class="bb-flow">
+        <p>The sources draw each glyph two times: very thin (Hairline) and very bold (Black). Each point in one master has a partner in the other master. A weight between them is a point on the straight line from one partner to the other.</p>
+        <p>Thus the masters must agree: the same number of points, in the same order, with the same start point and direction. Three italic glyphs did not agree. The pipeline fixes them in a build copy of the sources.</p>
+      </div>
+      <InterpolationFigure caption="The letter “a” from the font file. Right: the Hairline master (dashed), the Black master (solid), and the path of each of its 24 points. Regular 400 is not a drawing: it is a point on each of these lines." />
+    </section>
+
+    <section class="sec mgrid" id="pipeline" aria-labelledby="pipeline-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(4)}</span><h2 id="pipeline-h">{sections[4].title}</h2></div>
+      <div class="bb-flow">
+        <p>One command runs the four steps in about 1.5 minutes. FontLab is a closed tool, so the pipeline also builds a second font with the open compiler fontc. If the two fonts differ, a test fails.</p>
+      </div>
+      <Flow label="The LatoVar build pipeline" steps={steps}
+        caption="The sources in the repository do not change. Each step writes to build/LatoVar/." />
+    </section>
+
+    <section class="sec mgrid" id="hinting" aria-labelledby="hinting-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(5)}</span><h2 id="hinting-h">{sections[5].title}</h2></div>
+      <div class="bb-flow">
+        <p>Hinting moves the outline to the pixel grid at small sizes. FontLab rounds the two edges of a thin stroke one by one. At light weights, the two edges can go to the same pixel row, and the stroke disappears: for example, the bottom of the bowl of “b”.</p>
+        <p>The pipeline adds a link between the two edges, with a minimum distance of one pixel. Below, FreeType renders the same text with the two fonts.</p>
+      </div>
+      <PixelFigure caption="12 px, weight 100, FreeType with the TrueType hints. Each square is one pixel. Look at the bowls of “b” and “d”, the arms of “K”, and the “3”." />
+      <Chart kind="bars" caption="Glyphs that the hinting damages at 9, 12, and 16 px (upright)" unit="glyphs" data={failures} mark={[0, 1]}
+        note="FontLab = the FontLab 9 hinting only. Links = with the minimum-distance links. At 400 and 700, the two fonts are equal." />
+    </section>
+
+    <section class="sec mgrid" id="tests" aria-labelledby="tests-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(6)}</span><h2 id="tests-h">{sections[6].title}</h2></div>
+      <div class="bb-flow">
+        <p>A test of all things is not possible: about 3,050 glyphs, each weight from 100 to 900, and many renderers. So I selected the tests by risk: what fails for a user, and how probable is it in this pipeline?</p>
+        <p>The tests do a check of the binary files with the browser sanitizer, the variation tables, the names, the shaping with HarfBuzz, the hinting with FreeType, and the pixels against approved images. <a href={testing}>Read the test selection and the findings</a>.</p>
+      </div>
+      <Stats items={stats} />
+    </section>
+
+    <section class="sec mgrid" id="site" aria-labelledby="site-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(7)}</span><h2 id="site-h">{sections[7].title}</h2></div>
+      <div class="bb-flow">
+        <p>This site uses the Lite version: the outlines are the same, but the files are smaller. I cut the two files to English and Polish letters and kept the hints. Two files now give every weight and every italic weight.</p>
+        <p>The <a href={u('/sidequests/brandbook/#logo')}>wordmark</a> can at last use the true Thin weight for “un”.</p>
+      </div>
+      <Chart kind="bars" caption="Size of the sans-serif font files on this site" unit="KB" suffix=" KB" data={sizes} mark={[0, 1, 2]}
+        note="WOFF2, cut to English and Polish letters. A page loads only the files that it uses." />
+    </section>
+
+    <section class="sec mgrid" id="try" aria-labelledby="try-h">
+      <div class="sec-head sub"><span class="num m" aria-hidden="true">{num(8)}</span><h2 id="try-h">{sections[8].title}</h2></div>
+      <div class="bb-flow">
+        <p><a href={repo}>Get the source on GitHub</a>. The build needs macOS, FontLab 9, and uv. Then run <code>uv run tools/latovar/pipeline.py all</code> and <code>uv run pytest</code>.</p>
+        <p class="bb-note">“Lato” is a Reserved Font Name under the SIL Open Font License, and the name “LatoVar” contains it. Before you distribute LatoVar fonts, make sure that the name is permitted for your use.</p>
+      </div>
+    </section>
+  </div>
+</Base>

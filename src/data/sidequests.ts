@@ -18,6 +18,13 @@ export const sidequests: Sidequest[] = [
     kind: ['Brand', 'Identity', 'Design system'],
   },
   {
+    id: 'lato-var',
+    title: 'LatoVar',
+    year: 2026,
+    description: 'Lato as a variable font: one file with every weight from 100 to 900, hinted in FontLab 9 and tested. This site uses it.',
+    kind: ['Type', 'Variable font', 'Open source'],
+  },
+  {
     id: 'font-analysis',
     title: 'Font analysis app',
     year: 2026,

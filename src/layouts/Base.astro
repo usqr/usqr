@@ -1,7 +1,7 @@
 ---
 import '../styles/tokens.css';
 import '../styles/site.css';
-import lato400 from '../styles/fonts/lato-400.woff2?url';
+import sans from '../styles/fonts/latovar.woff2?url';
 import slab from '../styles/fonts/bitter-var.woff2?url';
 import Brandmark from '../components/Brandmark.astro';
 import { fullName, profile } from '../data/profile';
@@ -51,7 +51,7 @@ const year = new Date().getFullYear();
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" type="application/rss+xml" title={`${fullName} — Blog`} href={u('/rss.xml')}>
 <link rel="sitemap" href={u('/sitemap-index.xml')}>
-<link rel="preload" href={lato400} as="font" type="font/woff2" crossorigin>
+<link rel="preload" href={sans} as="font" type="font/woff2" crossorigin>
 <link rel="preload" href={slab} as="font" type="font/woff2" crossorigin>
 {goatcounter && <script is:inline async data-goatcounter={`https://${goatcounter}.goatcounter.com/count`} src="https://gc.zgo.at/count.js"></script>}
 <script is:inline data-theme-init>

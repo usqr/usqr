@@ -84,11 +84,18 @@ test('the PDF CV has two A4 pages at most', () => {
   assert.match(pdf, /\/MediaBox\s*\[0 0 59[45]\.\d+ 841\.\d+\]/);
 });
 
-test('the PDF CV embeds Lato and Bitter and no other font', () => {
+test('the PDF CV embeds LatoVar and Bitter and no other font', () => {
   const pdf = readFileSync(new URL(`../dist/${CV_PDF}`, import.meta.url), 'latin1');
   const fonts = [...new Set([...pdf.matchAll(/\/FontName\s*\/(?:[A-Z]{6}\+)?([\w-]+)/g)].map((m) => m[1]))];
-  assert.ok(fonts.some((f) => /^Lato/.test(f)), fonts.join());
+  assert.ok(fonts.some((f) => /^LatoVar/.test(f)), fonts.join());
   assert.ok(fonts.some((f) => /^Bitter/.test(f)), fonts.join());
-  for (const f of fonts) assert.match(f, /^(Lato|Bitter)/, fonts.join());
+  for (const f of fonts) assert.match(f, /^(LatoVar|Bitter)/, fonts.join());
   assert.match(pdf, /\/FontFile2|\/FontFile3/);
+});
+
+test('the PDF CV embeds LatoVar as real TrueType fonts, not as Type 3 drawings', () => {
+  const pdf = readFileSync(new URL(`../dist/${CV_PDF}`, import.meta.url), 'latin1');
+  const lato = [...pdf.matchAll(/\/Subtype\s*\/(\w+)\s*\/BaseFont\s*\/(?:[A-Z]{6}\+)?(LatoVar[\w-]*)/g)];
+  assert.ok(lato.length >= 3, `LatoVar fonts: ${lato.length}`);
+  for (const [, type, name] of lato) assert.equal(type, 'Type0', name);
 });
